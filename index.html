@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_cca788ce4087693483f97d5cdd4ca320 {
+                #map_e2fe5cfde345185169d312c50185920b {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -141,7 +141,7 @@
                         attribution: 'NOAA/NCEP'
                     });
                     // Radar view is the default view, so add immediately.
-                    window._radarLayer.addTo(window['map_cca788ce4087693483f97d5cdd4ca320']);
+                    window._radarLayer.addTo(window['map_e2fe5cfde345185169d312c50185920b']);
                 }
                 window._radarFrameLabel = currentTime
                     ? 'Radar frame: ' + new Date(currentTime).toLocaleString()
@@ -174,9 +174,9 @@
         .then(function(data) {
             // Looked up lazily here (not captured at script-parse time): this
             // script tag runs before folium's own map-init script further down
-            // the page, so window['map_cca788ce4087693483f97d5cdd4ca320'] would still be undefined if read
+            // the page, so window['map_e2fe5cfde345185169d312c50185920b'] would still be undefined if read
             // synchronously at the top of this IIFE.
-            var map = window['map_cca788ce4087693483f97d5cdd4ca320'];
+            var map = window['map_e2fe5cfde345185169d312c50185920b'];
             var infested = { type:'FeatureCollection',
                 features: data.features.filter(function(f) { return f.properties.zone_name === 1; }) };
             var buffer = { type:'FeatureCollection',
@@ -195,7 +195,7 @@
             window._bufferGroup.bringToBack();
         })
         .catch(function() {
-            var map = window['map_cca788ce4087693483f97d5cdd4ca320'];
+            var map = window['map_e2fe5cfde345185169d312c50185920b'];
             var notice = L.control({ position: 'bottomright' });
             notice.onAdd = function() {
                 var div = L.DomUtil.create('div');
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
 window._currentView = 'radar';
 (function() {
     function apply(view) {
-        var map = window['map_cca788ce4087693483f97d5cdd4ca320'];
+        var map = window['map_e2fe5cfde345185169d312c50185920b'];
         if (!map || !window._radarLayer || !window._gaugeGroup) { setTimeout(function() { apply(view); }, 200); return; }
         window._currentView = view;
         var buttons = document.querySelectorAll('.view-btn');
@@ -341,8 +341,8 @@ window._currentView = 'radar';
         'margin-right:8px;vertical-align:middle;background:#ffffff;border:1.5px solid #1a1a1a;"></span>';
     var STAR_SWATCH = '<span style="color:#dd5928;font-size:16px;vertical-align:middle;margin-right:5px;">&#9733;</span>';
     var LAYERS = [
-        { key: 'shelters',  label: 'Partner shelters',        swatchHtml: DIAMOND_SWATCH, getLayer: function() { return window['feature_group_c865d5bcf71d96ea446e282d3c80680e']; } },
-        { key: 'facilities', label: 'APA! facilities',        swatchHtml: STAR_SWATCH, getLayer: function() { return window['feature_group_e069c6671fc4ae74efa0f1691c445cdd']; } },
+        { key: 'shelters',  label: 'Partner shelters',        swatchHtml: DIAMOND_SWATCH, getLayer: function() { return window['feature_group_4fff5e6633c70bdcdcaf54cc1631e906']; } },
+        { key: 'facilities', label: 'APA! facilities',        swatchHtml: STAR_SWATCH, getLayer: function() { return window['feature_group_08a570e7cdf5c59bd049c37d26302af7']; } },
         { key: 'buffer',    label: 'NWS Buffer / Surveillance', swatchHtml: '<span class="swatch" style="background:#f39c12;"></span>', getLayer: function() { return window._bufferGroup; } },
         { key: 'infested',  label: 'NWS Infested Zone (live)', swatchHtml: '<span class="swatch" style="background:#e74c3c;"></span>', getLayer: function() { return window._infestedGroup; } }
     ];
@@ -358,9 +358,17 @@ window._currentView = 'radar';
         input.addEventListener('change', function(e) {
             function apply() {
                 var layer = item.getLayer();
-                var map = window['map_cca788ce4087693483f97d5cdd4ca320'];
+                var map = window['map_e2fe5cfde345185169d312c50185920b'];
                 if (!layer || !map) { setTimeout(apply, 200); return; }
                 if (e.target.checked) { map.addLayer(layer); } else { map.removeLayer(layer); }
+                // Zone polygons and gauge dots are both vector layers in the
+                // same Leaflet pane, so whichever was added to the map most
+                // recently renders on top -- re-toggling a zone layer would
+                // otherwise push it back above the gauge dots. Always pull
+                // gauges back to front after any toggle change.
+                if (window._gaugeGroup && map.hasLayer(window._gaugeGroup)) {
+                    window._gaugeGroup.bringToFront();
+                }
             }
             apply();
         });
@@ -368,14 +376,14 @@ window._currentView = 'radar';
 })();
 </script>
     
-            <div class="folium-map" id="map_cca788ce4087693483f97d5cdd4ca320" ></div>
+            <div class="folium-map" id="map_e2fe5cfde345185169d312c50185920b" ></div>
         
 </body>
 <script>
     
     
-            var map_cca788ce4087693483f97d5cdd4ca320 = L.map(
-                "map_cca788ce4087693483f97d5cdd4ca320",
+            var map_e2fe5cfde345185169d312c50185920b = L.map(
+                "map_e2fe5cfde345185169d312c50185920b",
                 {
                     center: [31.4, -99.5],
                     crs: L.CRS.EPSG3857,
@@ -387,13 +395,13 @@ window._currentView = 'radar';
 
                 }
             );
-            L.control.scale().addTo(map_cca788ce4087693483f97d5cdd4ca320);
+            L.control.scale().addTo(map_e2fe5cfde345185169d312c50185920b);
 
             
 
         
     
-            var tile_layer_00ee22ff044a0301cdfd5f277d4d2fe5 = L.tileLayer(
+            var tile_layer_78f3e7a259b357a29f47c8259d305f6e = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
                 {
   "minZoom": 0,
@@ -410,23 +418,23 @@ window._currentView = 'radar';
             );
         
     
-            tile_layer_00ee22ff044a0301cdfd5f277d4d2fe5.addTo(map_cca788ce4087693483f97d5cdd4ca320);
+            tile_layer_78f3e7a259b357a29f47c8259d305f6e.addTo(map_e2fe5cfde345185169d312c50185920b);
         
     
-            var feature_group_c865d5bcf71d96ea446e282d3c80680e = L.featureGroup(
+            var feature_group_4fff5e6633c70bdcdcaf54cc1631e906 = L.featureGroup(
                 {
 }
             );
         
     
-            var marker_fe17fe5b2754ad753d243bbea8f60a7b = L.marker(
+            var marker_ca67885be57000292472afab177fe3b5 = L.marker(
                 [27.5419, -99.4698],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_b8d93e7c64e76f335176d907509fa544 = L.divIcon({
+            var div_icon_115b14a7b4ea2588d565f76453e42411 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:20.848px;height:20.848px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:7.5760000000000005px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -434,24 +442,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_f0c6be7c6ac7964b2133ea637c49a4e9 = L.popup({
+        var popup_b33910e2eba50ee8009e696f6120bab0 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_84ef96a5bb5596ae72ddc788398dffbb = $(`<div id="html_84ef96a5bb5596ae72ddc788398dffbb" style="width: 100.0%; height: 100.0%;"><b>Laredo Animal Care Services</b><br>APA Partner Shelter<br>452 intakes YTD 2026</div>`)[0];
-                popup_f0c6be7c6ac7964b2133ea637c49a4e9.setContent(html_84ef96a5bb5596ae72ddc788398dffbb);
+                var html_9b0f9d495815df0831d8063c61a2bdd4 = $(`<div id="html_9b0f9d495815df0831d8063c61a2bdd4" style="width: 100.0%; height: 100.0%;"><b>Laredo Animal Care Services</b><br>APA Partner Shelter<br>452 intakes YTD 2026</div>`)[0];
+                popup_b33910e2eba50ee8009e696f6120bab0.setContent(html_9b0f9d495815df0831d8063c61a2bdd4);
             
         
 
-        marker_fe17fe5b2754ad753d243bbea8f60a7b.bindPopup(popup_f0c6be7c6ac7964b2133ea637c49a4e9)
+        marker_ca67885be57000292472afab177fe3b5.bindPopup(popup_b33910e2eba50ee8009e696f6120bab0)
         ;
 
         
     
     
-            marker_fe17fe5b2754ad753d243bbea8f60a7b.bindTooltip(
+            marker_ca67885be57000292472afab177fe3b5.bindTooltip(
                 `<div>
                      <div><b>Laredo Animal Care Services</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -461,17 +469,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_fe17fe5b2754ad753d243bbea8f60a7b.setIcon(div_icon_b8d93e7c64e76f335176d907509fa544);
+                marker_ca67885be57000292472afab177fe3b5.setIcon(div_icon_115b14a7b4ea2588d565f76453e42411);
             
     
-            var marker_e1f0d452701323ad2a2b36425d3acd7a = L.marker(
+            var marker_93cb12946a7f2213e5002a6023ec60f3 = L.marker(
                 [31.3502, -94.7468],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_c349a08747c3206a778492b98dbd2dbe = L.divIcon({
+            var div_icon_4aab3de7967199eefcc934149be20fe6 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:19.168px;height:19.168px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:8.416px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -479,24 +487,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_ea497cbf2be58641ca703b08e6425e19 = L.popup({
+        var popup_f717b0b6291a4a76ef0164420fd70cb4 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_6a4654aeda530417c993d7a05edbf640 = $(`<div id="html_6a4654aeda530417c993d7a05edbf640" style="width: 100.0%; height: 100.0%;"><b>City of Lufkin Animal Services</b><br>APA Partner Shelter<br>382 intakes YTD 2026</div>`)[0];
-                popup_ea497cbf2be58641ca703b08e6425e19.setContent(html_6a4654aeda530417c993d7a05edbf640);
+                var html_9ff75046041b37754452ca877d26a815 = $(`<div id="html_9ff75046041b37754452ca877d26a815" style="width: 100.0%; height: 100.0%;"><b>City of Lufkin Animal Services</b><br>APA Partner Shelter<br>382 intakes YTD 2026</div>`)[0];
+                popup_f717b0b6291a4a76ef0164420fd70cb4.setContent(html_9ff75046041b37754452ca877d26a815);
             
         
 
-        marker_e1f0d452701323ad2a2b36425d3acd7a.bindPopup(popup_ea497cbf2be58641ca703b08e6425e19)
+        marker_93cb12946a7f2213e5002a6023ec60f3.bindPopup(popup_f717b0b6291a4a76ef0164420fd70cb4)
         ;
 
         
     
     
-            marker_e1f0d452701323ad2a2b36425d3acd7a.bindTooltip(
+            marker_93cb12946a7f2213e5002a6023ec60f3.bindTooltip(
                 `<div>
                      <div><b>City of Lufkin Animal Services</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -506,17 +514,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_e1f0d452701323ad2a2b36425d3acd7a.setIcon(div_icon_c349a08747c3206a778492b98dbd2dbe);
+                marker_93cb12946a7f2213e5002a6023ec60f3.setIcon(div_icon_4aab3de7967199eefcc934149be20fe6);
             
     
-            var marker_d9d527a3f0658ebd4efb5b33080859a9 = L.marker(
+            var marker_ec2021e22f813db1760679d32f3d7367 = L.marker(
                 [26.4884, -97.7856],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_645334176c91a47657affd46a75c12ca = L.divIcon({
+            var div_icon_95d1116d56ba1fdc5a8980b55d577c80 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:16.288px;height:16.288px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:9.856px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -524,24 +532,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_eb425f6f404d3fb94c9c508542a7d107 = L.popup({
+        var popup_1ffe99c2df8d23c755a4516a9fbfb65d = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_8f9099a9da15b0d55976ed11358e5e99 = $(`<div id="html_8f9099a9da15b0d55976ed11358e5e99" style="width: 100.0%; height: 100.0%;"><b>Raymondville Animal Shelter</b><br>APA Partner Shelter<br>262 intakes YTD 2026</div>`)[0];
-                popup_eb425f6f404d3fb94c9c508542a7d107.setContent(html_8f9099a9da15b0d55976ed11358e5e99);
+                var html_bea663756b07f2befb887cd1e815eb09 = $(`<div id="html_bea663756b07f2befb887cd1e815eb09" style="width: 100.0%; height: 100.0%;"><b>Raymondville Animal Shelter</b><br>APA Partner Shelter<br>262 intakes YTD 2026</div>`)[0];
+                popup_1ffe99c2df8d23c755a4516a9fbfb65d.setContent(html_bea663756b07f2befb887cd1e815eb09);
             
         
 
-        marker_d9d527a3f0658ebd4efb5b33080859a9.bindPopup(popup_eb425f6f404d3fb94c9c508542a7d107)
+        marker_ec2021e22f813db1760679d32f3d7367.bindPopup(popup_1ffe99c2df8d23c755a4516a9fbfb65d)
         ;
 
         
     
     
-            marker_d9d527a3f0658ebd4efb5b33080859a9.bindTooltip(
+            marker_ec2021e22f813db1760679d32f3d7367.bindTooltip(
                 `<div>
                      <div><b>Raymondville Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -551,17 +559,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_d9d527a3f0658ebd4efb5b33080859a9.setIcon(div_icon_645334176c91a47657affd46a75c12ca);
+                marker_ec2021e22f813db1760679d32f3d7367.setIcon(div_icon_95d1116d56ba1fdc5a8980b55d577c80);
             
     
-            var marker_00b6ee5502529130b4fb61ebaa70b578 = L.marker(
+            var marker_01c443caf1fb7164b0d39633351ba489 = L.marker(
                 [30.2057, -97.3015],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_370347f2f4ccf42e5ecc0f3dcb55b1e1 = L.divIcon({
+            var div_icon_7e8208bd63997d76ea8b70ceab6a7efe = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:15.280000000000001px;height:15.280000000000001px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:10.36px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -569,24 +577,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_1f622c535740d16254e1acd77b5e39cd = L.popup({
+        var popup_d7c89a9746bf910c268b06303fcc914c = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_660cc8ceee03144fb9267fcde3ccbe00 = $(`<div id="html_660cc8ceee03144fb9267fcde3ccbe00" style="width: 100.0%; height: 100.0%;"><b>Bastrop County Animal Services</b><br>APA Partner Shelter<br>220 intakes YTD 2026</div>`)[0];
-                popup_1f622c535740d16254e1acd77b5e39cd.setContent(html_660cc8ceee03144fb9267fcde3ccbe00);
+                var html_b42a14f17f701c82321b58363501ee71 = $(`<div id="html_b42a14f17f701c82321b58363501ee71" style="width: 100.0%; height: 100.0%;"><b>Bastrop County Animal Services</b><br>APA Partner Shelter<br>220 intakes YTD 2026</div>`)[0];
+                popup_d7c89a9746bf910c268b06303fcc914c.setContent(html_b42a14f17f701c82321b58363501ee71);
             
         
 
-        marker_00b6ee5502529130b4fb61ebaa70b578.bindPopup(popup_1f622c535740d16254e1acd77b5e39cd)
+        marker_01c443caf1fb7164b0d39633351ba489.bindPopup(popup_d7c89a9746bf910c268b06303fcc914c)
         ;
 
         
     
     
-            marker_00b6ee5502529130b4fb61ebaa70b578.bindTooltip(
+            marker_01c443caf1fb7164b0d39633351ba489.bindTooltip(
                 `<div>
                      <div><b>Bastrop County Animal Services</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -596,17 +604,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_00b6ee5502529130b4fb61ebaa70b578.setIcon(div_icon_370347f2f4ccf42e5ecc0f3dcb55b1e1);
+                marker_01c443caf1fb7164b0d39633351ba489.setIcon(div_icon_7e8208bd63997d76ea8b70ceab6a7efe);
             
     
-            var marker_6d7edbe361af74f9a5b1c8ed5b0090ef = L.marker(
+            var marker_1b3833896294cddcd42f8c904f1ac4c2 = L.marker(
                 [32.3879, -97.4042],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_f0b592e0a4291cdc4c54ef46031f8400 = L.divIcon({
+            var div_icon_cf636cc0f7d5ac8abc74f31a4c0b5612 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:14.872px;height:14.872px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:10.564px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -614,24 +622,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_5f0457ba67375bb1b8b646aaeaeab970 = L.popup({
+        var popup_38c829cc152d8ca7fa6256d47de6e518 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_58150d23892340f110412b9e9a3763f8 = $(`<div id="html_58150d23892340f110412b9e9a3763f8" style="width: 100.0%; height: 100.0%;"><b>Cleburne Animal Services</b><br>APA Partner Shelter<br>203 intakes YTD 2026</div>`)[0];
-                popup_5f0457ba67375bb1b8b646aaeaeab970.setContent(html_58150d23892340f110412b9e9a3763f8);
+                var html_c441b78768823017f7e46f4afdedab1d = $(`<div id="html_c441b78768823017f7e46f4afdedab1d" style="width: 100.0%; height: 100.0%;"><b>Cleburne Animal Services</b><br>APA Partner Shelter<br>203 intakes YTD 2026</div>`)[0];
+                popup_38c829cc152d8ca7fa6256d47de6e518.setContent(html_c441b78768823017f7e46f4afdedab1d);
             
         
 
-        marker_6d7edbe361af74f9a5b1c8ed5b0090ef.bindPopup(popup_5f0457ba67375bb1b8b646aaeaeab970)
+        marker_1b3833896294cddcd42f8c904f1ac4c2.bindPopup(popup_38c829cc152d8ca7fa6256d47de6e518)
         ;
 
         
     
     
-            marker_6d7edbe361af74f9a5b1c8ed5b0090ef.bindTooltip(
+            marker_1b3833896294cddcd42f8c904f1ac4c2.bindTooltip(
                 `<div>
                      <div><b>Cleburne Animal Services</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -641,17 +649,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_6d7edbe361af74f9a5b1c8ed5b0090ef.setIcon(div_icon_f0b592e0a4291cdc4c54ef46031f8400);
+                marker_1b3833896294cddcd42f8c904f1ac4c2.setIcon(div_icon_cf636cc0f7d5ac8abc74f31a4c0b5612);
             
     
-            var marker_4ff52b9e959d4b124867914a3894a6b8 = L.marker(
+            var marker_cb1555f9701d4dc7ff2955a6f5b58986 = L.marker(
                 [30.1674, -96.9402],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_575f02ac51a192079cbb7b24eaa778f0 = L.divIcon({
+            var div_icon_d8bd025af88fadadfb5a8a95c7d3687f = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:13.336px;height:13.336px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:11.332px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -659,24 +667,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_1cfee6262bb22cd24b7e075aef98f18a = L.popup({
+        var popup_48936ac3560329ab442c4f5642720d43 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_f586b842fe00bd38d81b4ee0e00ed3f6 = $(`<div id="html_f586b842fe00bd38d81b4ee0e00ed3f6" style="width: 100.0%; height: 100.0%;"><b>Giddings Animal Shelter</b><br>APA Partner Shelter<br>139 intakes YTD 2026</div>`)[0];
-                popup_1cfee6262bb22cd24b7e075aef98f18a.setContent(html_f586b842fe00bd38d81b4ee0e00ed3f6);
+                var html_1cc7fba0996513f080f0cedd42090b46 = $(`<div id="html_1cc7fba0996513f080f0cedd42090b46" style="width: 100.0%; height: 100.0%;"><b>Giddings Animal Shelter</b><br>APA Partner Shelter<br>139 intakes YTD 2026</div>`)[0];
+                popup_48936ac3560329ab442c4f5642720d43.setContent(html_1cc7fba0996513f080f0cedd42090b46);
             
         
 
-        marker_4ff52b9e959d4b124867914a3894a6b8.bindPopup(popup_1cfee6262bb22cd24b7e075aef98f18a)
+        marker_cb1555f9701d4dc7ff2955a6f5b58986.bindPopup(popup_48936ac3560329ab442c4f5642720d43)
         ;
 
         
     
     
-            marker_4ff52b9e959d4b124867914a3894a6b8.bindTooltip(
+            marker_cb1555f9701d4dc7ff2955a6f5b58986.bindTooltip(
                 `<div>
                      <div><b>Giddings Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -686,17 +694,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_4ff52b9e959d4b124867914a3894a6b8.setIcon(div_icon_575f02ac51a192079cbb7b24eaa778f0);
+                marker_cb1555f9701d4dc7ff2955a6f5b58986.setIcon(div_icon_d8bd025af88fadadfb5a8a95c7d3687f);
             
     
-            var marker_cd548e750865b7d20390e8dfd4a6359a = L.marker(
+            var marker_246b3fc4a47b8c9d327c1a0c53aa9145 = L.marker(
                 [29.3633, -100.9054],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_05b823a47ffa23f5643ae17f1d9a67d8 = L.divIcon({
+            var div_icon_31b14130df86c45d3009d222d2cd5cf0 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:12.928px;height:12.928px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:11.536px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -704,24 +712,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_af5ab6baf29c2f283a24031fd39d2634 = L.popup({
+        var popup_b166931233ee701ebc6e4261de78c3b6 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_bf07c951e108b510496547bf0d7d389d = $(`<div id="html_bf07c951e108b510496547bf0d7d389d" style="width: 100.0%; height: 100.0%;"><b>Del Rio Animal Control</b><br>APA Partner Shelter<br>122 intakes YTD 2026</div>`)[0];
-                popup_af5ab6baf29c2f283a24031fd39d2634.setContent(html_bf07c951e108b510496547bf0d7d389d);
+                var html_c326feb5cc88cac7903c2bf52a37d1bc = $(`<div id="html_c326feb5cc88cac7903c2bf52a37d1bc" style="width: 100.0%; height: 100.0%;"><b>Del Rio Animal Control</b><br>APA Partner Shelter<br>122 intakes YTD 2026</div>`)[0];
+                popup_b166931233ee701ebc6e4261de78c3b6.setContent(html_c326feb5cc88cac7903c2bf52a37d1bc);
             
         
 
-        marker_cd548e750865b7d20390e8dfd4a6359a.bindPopup(popup_af5ab6baf29c2f283a24031fd39d2634)
+        marker_246b3fc4a47b8c9d327c1a0c53aa9145.bindPopup(popup_b166931233ee701ebc6e4261de78c3b6)
         ;
 
         
     
     
-            marker_cd548e750865b7d20390e8dfd4a6359a.bindTooltip(
+            marker_246b3fc4a47b8c9d327c1a0c53aa9145.bindTooltip(
                 `<div>
                      <div><b>Del Rio Animal Control</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -731,17 +739,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_cd548e750865b7d20390e8dfd4a6359a.setIcon(div_icon_05b823a47ffa23f5643ae17f1d9a67d8);
+                marker_246b3fc4a47b8c9d327c1a0c53aa9145.setIcon(div_icon_31b14130df86c45d3009d222d2cd5cf0);
             
     
-            var marker_a5345dd0dae1bbe945d64d34a60e8f59 = L.marker(
+            var marker_a54075c33e8c7f70c86d9109e754b2a0 = L.marker(
                 [31.4015, -103.5094],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_c4e217aee4930c6de6367ed30bdc89ec = L.divIcon({
+            var div_icon_456515ca18794c90da7ecc70d94b7272 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:12.928px;height:12.928px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:11.536px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -749,24 +757,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_82b71d6ee8d1e8c01d9b0a6a8b2da638 = L.popup({
+        var popup_c92449c42a72920564d700e24764a871 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_04ba487cfc99b9737c99efcc0c414c9b = $(`<div id="html_04ba487cfc99b9737c99efcc0c414c9b" style="width: 100.0%; height: 100.0%;"><b>Pecos Animal Shelter</b><br>APA Partner Shelter<br>122 intakes YTD 2026</div>`)[0];
-                popup_82b71d6ee8d1e8c01d9b0a6a8b2da638.setContent(html_04ba487cfc99b9737c99efcc0c414c9b);
+                var html_048acfe177836df0b34fec466aabbbb4 = $(`<div id="html_048acfe177836df0b34fec466aabbbb4" style="width: 100.0%; height: 100.0%;"><b>Pecos Animal Shelter</b><br>APA Partner Shelter<br>122 intakes YTD 2026</div>`)[0];
+                popup_c92449c42a72920564d700e24764a871.setContent(html_048acfe177836df0b34fec466aabbbb4);
             
         
 
-        marker_a5345dd0dae1bbe945d64d34a60e8f59.bindPopup(popup_82b71d6ee8d1e8c01d9b0a6a8b2da638)
+        marker_a54075c33e8c7f70c86d9109e754b2a0.bindPopup(popup_c92449c42a72920564d700e24764a871)
         ;
 
         
     
     
-            marker_a5345dd0dae1bbe945d64d34a60e8f59.bindTooltip(
+            marker_a54075c33e8c7f70c86d9109e754b2a0.bindTooltip(
                 `<div>
                      <div><b>Pecos Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -776,17 +784,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_a5345dd0dae1bbe945d64d34a60e8f59.setIcon(div_icon_c4e217aee4930c6de6367ed30bdc89ec);
+                marker_a54075c33e8c7f70c86d9109e754b2a0.setIcon(div_icon_456515ca18794c90da7ecc70d94b7272);
             
     
-            var marker_e853d99080760a516087cefdfbdef2bc = L.marker(
+            var marker_68ca0e95bf853159611c93d1324eee95 = L.marker(
                 [29.1382, -98.9071],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_5b2be36bc8ed8430c04119798162db34 = L.divIcon({
+            var div_icon_698f6cecb3ab3968d5a7bddfdd2e37bc = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:12.592px;height:12.592px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:11.704px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -794,24 +802,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_2891e5390801ecf4565bce06f5a997a4 = L.popup({
+        var popup_bd2b771bfa9e5b8ddc69fc19c42326d8 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_7007c926c217075d7795faa1b80f1450 = $(`<div id="html_7007c926c217075d7795faa1b80f1450" style="width: 100.0%; height: 100.0%;"><b>Devine Animal Control</b><br>APA Partner Shelter<br>108 intakes YTD 2026</div>`)[0];
-                popup_2891e5390801ecf4565bce06f5a997a4.setContent(html_7007c926c217075d7795faa1b80f1450);
+                var html_21555888cc2937ebf2dca131ea44eeb4 = $(`<div id="html_21555888cc2937ebf2dca131ea44eeb4" style="width: 100.0%; height: 100.0%;"><b>Devine Animal Control</b><br>APA Partner Shelter<br>108 intakes YTD 2026</div>`)[0];
+                popup_bd2b771bfa9e5b8ddc69fc19c42326d8.setContent(html_21555888cc2937ebf2dca131ea44eeb4);
             
         
 
-        marker_e853d99080760a516087cefdfbdef2bc.bindPopup(popup_2891e5390801ecf4565bce06f5a997a4)
+        marker_68ca0e95bf853159611c93d1324eee95.bindPopup(popup_bd2b771bfa9e5b8ddc69fc19c42326d8)
         ;
 
         
     
     
-            marker_e853d99080760a516087cefdfbdef2bc.bindTooltip(
+            marker_68ca0e95bf853159611c93d1324eee95.bindTooltip(
                 `<div>
                      <div><b>Devine Animal Control</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -821,17 +829,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_e853d99080760a516087cefdfbdef2bc.setIcon(div_icon_5b2be36bc8ed8430c04119798162db34);
+                marker_68ca0e95bf853159611c93d1324eee95.setIcon(div_icon_698f6cecb3ab3968d5a7bddfdd2e37bc);
             
     
-            var marker_0a537e2eeaaf2ae9893f0349f35368ea = L.marker(
+            var marker_eaae121f6d2800c0e4dd6b342441bd5c = L.marker(
                 [29.2097, -99.7862],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_7ad801566c2c9ef40f8171e2581be0c5 = L.divIcon({
+            var div_icon_ed5d84c2a5a4f2e90e613164ae33b6f6 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:12.304px;height:12.304px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:11.847999999999999px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -839,24 +847,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_2f96e36595bdf00387eb036e91f7c361 = L.popup({
+        var popup_6990aacd5f6eed1cfa167ef25effb55b = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_8475016bd05414cc379746aa94b91233 = $(`<div id="html_8475016bd05414cc379746aa94b91233" style="width: 100.0%; height: 100.0%;"><b>Pepe's Pals Kitten Rescue</b><br>APA Partner Shelter<br>96 intakes YTD 2026</div>`)[0];
-                popup_2f96e36595bdf00387eb036e91f7c361.setContent(html_8475016bd05414cc379746aa94b91233);
+                var html_1d9c565907b3ce5d917b6dd1eb2359fe = $(`<div id="html_1d9c565907b3ce5d917b6dd1eb2359fe" style="width: 100.0%; height: 100.0%;"><b>Pepe's Pals Kitten Rescue</b><br>APA Partner Shelter<br>96 intakes YTD 2026</div>`)[0];
+                popup_6990aacd5f6eed1cfa167ef25effb55b.setContent(html_1d9c565907b3ce5d917b6dd1eb2359fe);
             
         
 
-        marker_0a537e2eeaaf2ae9893f0349f35368ea.bindPopup(popup_2f96e36595bdf00387eb036e91f7c361)
+        marker_eaae121f6d2800c0e4dd6b342441bd5c.bindPopup(popup_6990aacd5f6eed1cfa167ef25effb55b)
         ;
 
         
     
     
-            marker_0a537e2eeaaf2ae9893f0349f35368ea.bindTooltip(
+            marker_eaae121f6d2800c0e4dd6b342441bd5c.bindTooltip(
                 `<div>
                      <div><b>Pepe's Pals Kitten Rescue</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -866,17 +874,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_0a537e2eeaaf2ae9893f0349f35368ea.setIcon(div_icon_7ad801566c2c9ef40f8171e2581be0c5);
+                marker_eaae121f6d2800c0e4dd6b342441bd5c.setIcon(div_icon_ed5d84c2a5a4f2e90e613164ae33b6f6);
             
     
-            var marker_ef60d653d3083052fb595d41ca165236 = L.marker(
+            var marker_e44c4d5c7141c1087d03998de5a91970 = L.marker(
                 [26.2648, -98.193],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_e42e7288472d9eb3ea0278d3c23fc181 = L.divIcon({
+            var div_icon_803ac8e315d4e4d7c85f4cf755d099e5 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.8px;height:11.8px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.1px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -884,24 +892,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_d92bfb595121839a3f649e6e776c5bbd = L.popup({
+        var popup_3a09e169775ae4a8972a40ac7fa37f8b = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_73d404d20571a5070c05cfaef21ab894 = $(`<div id="html_73d404d20571a5070c05cfaef21ab894" style="width: 100.0%; height: 100.0%;"><b>Palm Valley Animal Society</b><br>APA Partner Shelter<br>75 intakes YTD 2026</div>`)[0];
-                popup_d92bfb595121839a3f649e6e776c5bbd.setContent(html_73d404d20571a5070c05cfaef21ab894);
+                var html_461841fe406b94ff3542e0bdecffc7c6 = $(`<div id="html_461841fe406b94ff3542e0bdecffc7c6" style="width: 100.0%; height: 100.0%;"><b>Palm Valley Animal Society</b><br>APA Partner Shelter<br>75 intakes YTD 2026</div>`)[0];
+                popup_3a09e169775ae4a8972a40ac7fa37f8b.setContent(html_461841fe406b94ff3542e0bdecffc7c6);
             
         
 
-        marker_ef60d653d3083052fb595d41ca165236.bindPopup(popup_d92bfb595121839a3f649e6e776c5bbd)
+        marker_e44c4d5c7141c1087d03998de5a91970.bindPopup(popup_3a09e169775ae4a8972a40ac7fa37f8b)
         ;
 
         
     
     
-            marker_ef60d653d3083052fb595d41ca165236.bindTooltip(
+            marker_e44c4d5c7141c1087d03998de5a91970.bindTooltip(
                 `<div>
                      <div><b>Palm Valley Animal Society</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -911,17 +919,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_ef60d653d3083052fb595d41ca165236.setIcon(div_icon_e42e7288472d9eb3ea0278d3c23fc181);
+                marker_e44c4d5c7141c1087d03998de5a91970.setIcon(div_icon_803ac8e315d4e4d7c85f4cf755d099e5);
             
     
-            var marker_3a637f0f70b61bc10c83babf53821b6f = L.marker(
+            var marker_3e8892f0aacb9391d7e6dc0fd811542b = L.marker(
                 [29.1819, -98.425],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_37c9a3dc6d8ea777213dfced891365c3 = L.divIcon({
+            var div_icon_d96ccc5a6b4988199606491fb48a2aee = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.776px;height:11.776px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.112px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -929,24 +937,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_30a513db80926cb73ae5d14024bb50db = L.popup({
+        var popup_e1cb2ada96e9b107c2dcfcf13a122a81 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_6498e2c00adb2423a6fafb10d813e713 = $(`<div id="html_6498e2c00adb2423a6fafb10d813e713" style="width: 100.0%; height: 100.0%;"><b>Sandy Oaks Dogs</b><br>APA Partner Shelter<br>74 intakes YTD 2026</div>`)[0];
-                popup_30a513db80926cb73ae5d14024bb50db.setContent(html_6498e2c00adb2423a6fafb10d813e713);
+                var html_a4d7b7210a1b63ce006f674fbad1485f = $(`<div id="html_a4d7b7210a1b63ce006f674fbad1485f" style="width: 100.0%; height: 100.0%;"><b>Sandy Oaks Dogs</b><br>APA Partner Shelter<br>74 intakes YTD 2026</div>`)[0];
+                popup_e1cb2ada96e9b107c2dcfcf13a122a81.setContent(html_a4d7b7210a1b63ce006f674fbad1485f);
             
         
 
-        marker_3a637f0f70b61bc10c83babf53821b6f.bindPopup(popup_30a513db80926cb73ae5d14024bb50db)
+        marker_3e8892f0aacb9391d7e6dc0fd811542b.bindPopup(popup_e1cb2ada96e9b107c2dcfcf13a122a81)
         ;
 
         
     
     
-            marker_3a637f0f70b61bc10c83babf53821b6f.bindTooltip(
+            marker_3e8892f0aacb9391d7e6dc0fd811542b.bindTooltip(
                 `<div>
                      <div><b>Sandy Oaks Dogs</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -956,17 +964,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_3a637f0f70b61bc10c83babf53821b6f.setIcon(div_icon_37c9a3dc6d8ea777213dfced891365c3);
+                marker_3e8892f0aacb9391d7e6dc0fd811542b.setIcon(div_icon_d96ccc5a6b4988199606491fb48a2aee);
             
     
-            var marker_0e45e16deadf4035a20bd311762727e9 = L.marker(
+            var marker_bde0649e073c59b29da7ae6937ecdc83 = L.marker(
                 [28.8924, -99.1188],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_72111a8870e63e2929a70f8f711b764d = L.divIcon({
+            var div_icon_7825857cf0de8c54c08b7976199522d0 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.751999999999999px;height:11.751999999999999px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.124px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -974,24 +982,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_01d5c32deda7312fd364fad2f7612fc8 = L.popup({
+        var popup_031bc8456b8610e1f0d67f842cf9b8a5 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_d479dddf59579d35a41c5d055b7dcc38 = $(`<div id="html_d479dddf59579d35a41c5d055b7dcc38" style="width: 100.0%; height: 100.0%;"><b>Pearsall Animal Control</b><br>APA Partner Shelter<br>73 intakes YTD 2026</div>`)[0];
-                popup_01d5c32deda7312fd364fad2f7612fc8.setContent(html_d479dddf59579d35a41c5d055b7dcc38);
+                var html_46eb95fddcf090d9f17d601c9baebcc9 = $(`<div id="html_46eb95fddcf090d9f17d601c9baebcc9" style="width: 100.0%; height: 100.0%;"><b>Pearsall Animal Control</b><br>APA Partner Shelter<br>73 intakes YTD 2026</div>`)[0];
+                popup_031bc8456b8610e1f0d67f842cf9b8a5.setContent(html_46eb95fddcf090d9f17d601c9baebcc9);
             
         
 
-        marker_0e45e16deadf4035a20bd311762727e9.bindPopup(popup_01d5c32deda7312fd364fad2f7612fc8)
+        marker_bde0649e073c59b29da7ae6937ecdc83.bindPopup(popup_031bc8456b8610e1f0d67f842cf9b8a5)
         ;
 
         
     
     
-            marker_0e45e16deadf4035a20bd311762727e9.bindTooltip(
+            marker_bde0649e073c59b29da7ae6937ecdc83.bindTooltip(
                 `<div>
                      <div><b>Pearsall Animal Control</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1001,17 +1009,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_0e45e16deadf4035a20bd311762727e9.setIcon(div_icon_72111a8870e63e2929a70f8f711b764d);
+                marker_bde0649e073c59b29da7ae6937ecdc83.setIcon(div_icon_7825857cf0de8c54c08b7976199522d0);
             
     
-            var marker_a6dbe2d4cfc771d96ec4565949ecd8d6 = L.marker(
+            var marker_7ee78c7e8274ada4d1c48b86cbba495d = L.marker(
                 [29.7858, -95.8245],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_53302338070531af7321f28d62baf053 = L.divIcon({
+            var div_icon_a1c8c4cebfed356a454f0a4f1afcd10b = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.68px;height:11.68px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.16px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1019,24 +1027,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_bf5bebb6889b654f571846c21dbed9fb = L.popup({
+        var popup_53301cbef3e03e7ce62c1615a07228ba = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_65eee20b463aff23138236285546d567 = $(`<div id="html_65eee20b463aff23138236285546d567" style="width: 100.0%; height: 100.0%;"><b>Jen's Neonatal Nursery</b><br>APA Partner Shelter<br>70 intakes YTD 2026</div>`)[0];
-                popup_bf5bebb6889b654f571846c21dbed9fb.setContent(html_65eee20b463aff23138236285546d567);
+                var html_06f4492de04d505d13161c788a102824 = $(`<div id="html_06f4492de04d505d13161c788a102824" style="width: 100.0%; height: 100.0%;"><b>Jen's Neonatal Nursery</b><br>APA Partner Shelter<br>70 intakes YTD 2026</div>`)[0];
+                popup_53301cbef3e03e7ce62c1615a07228ba.setContent(html_06f4492de04d505d13161c788a102824);
             
         
 
-        marker_a6dbe2d4cfc771d96ec4565949ecd8d6.bindPopup(popup_bf5bebb6889b654f571846c21dbed9fb)
+        marker_7ee78c7e8274ada4d1c48b86cbba495d.bindPopup(popup_53301cbef3e03e7ce62c1615a07228ba)
         ;
 
         
     
     
-            marker_a6dbe2d4cfc771d96ec4565949ecd8d6.bindTooltip(
+            marker_7ee78c7e8274ada4d1c48b86cbba495d.bindTooltip(
                 `<div>
                      <div><b>Jen's Neonatal Nursery</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1046,17 +1054,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_a6dbe2d4cfc771d96ec4565949ecd8d6.setIcon(div_icon_53302338070531af7321f28d62baf053);
+                marker_7ee78c7e8274ada4d1c48b86cbba495d.setIcon(div_icon_a1c8c4cebfed356a454f0a4f1afcd10b);
             
     
-            var marker_2dfe31f44d207145234d20bffb6713ae = L.marker(
+            var marker_8ef75bb0b115ae657cc30774b3b25529 = L.marker(
                 [26.4103, -97.7894],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_7e046c4e40ca47b119f8f78eb270f432 = L.divIcon({
+            var div_icon_67b34229992d995076a0b3d341b1f4cc = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.584px;height:11.584px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.208px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1064,24 +1072,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_f83eb3c54d8213b4c2092305eff9c16d = L.popup({
+        var popup_3fead670c11e1bef5f1c1affd2477644 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_9fb301c06e919082e8378296c3452b2b = $(`<div id="html_9fb301c06e919082e8378296c3452b2b" style="width: 100.0%; height: 100.0%;"><b>Lyford Animal Shelter</b><br>APA Partner Shelter<br>66 intakes YTD 2026</div>`)[0];
-                popup_f83eb3c54d8213b4c2092305eff9c16d.setContent(html_9fb301c06e919082e8378296c3452b2b);
+                var html_44d5bfa95d74021c3d8019d6d5f0fd9e = $(`<div id="html_44d5bfa95d74021c3d8019d6d5f0fd9e" style="width: 100.0%; height: 100.0%;"><b>Lyford Animal Shelter</b><br>APA Partner Shelter<br>66 intakes YTD 2026</div>`)[0];
+                popup_3fead670c11e1bef5f1c1affd2477644.setContent(html_44d5bfa95d74021c3d8019d6d5f0fd9e);
             
         
 
-        marker_2dfe31f44d207145234d20bffb6713ae.bindPopup(popup_f83eb3c54d8213b4c2092305eff9c16d)
+        marker_8ef75bb0b115ae657cc30774b3b25529.bindPopup(popup_3fead670c11e1bef5f1c1affd2477644)
         ;
 
         
     
     
-            marker_2dfe31f44d207145234d20bffb6713ae.bindTooltip(
+            marker_8ef75bb0b115ae657cc30774b3b25529.bindTooltip(
                 `<div>
                      <div><b>Lyford Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1091,17 +1099,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_2dfe31f44d207145234d20bffb6713ae.setIcon(div_icon_7e046c4e40ca47b119f8f78eb270f432);
+                marker_8ef75bb0b115ae657cc30774b3b25529.setIcon(div_icon_67b34229992d995076a0b3d341b1f4cc);
             
     
-            var marker_6ae88a68f522c5ae0184bbd7132ded09 = L.marker(
+            var marker_810dfc64bef1e6ad3b35de0391cfea37 = L.marker(
                 [27.7565, -98.2333],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_529db3f0aab066bc42184da65faf770c = L.divIcon({
+            var div_icon_f6d860e1ec220c52605573a3919726bf = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.512px;height:11.512px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.244px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1109,24 +1117,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_638b5166781565c58e7719da22c88231 = L.popup({
+        var popup_f535283f9d90f84ebee94c49314d2b33 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_447a2f9b82d0574e3d1a5b5489e57434 = $(`<div id="html_447a2f9b82d0574e3d1a5b5489e57434" style="width: 100.0%; height: 100.0%;"><b>San Diego Animal Control</b><br>APA Partner Shelter<br>63 intakes YTD 2026</div>`)[0];
-                popup_638b5166781565c58e7719da22c88231.setContent(html_447a2f9b82d0574e3d1a5b5489e57434);
+                var html_8b31eb372087912fefd563a48e8a5b1b = $(`<div id="html_8b31eb372087912fefd563a48e8a5b1b" style="width: 100.0%; height: 100.0%;"><b>San Diego Animal Control</b><br>APA Partner Shelter<br>63 intakes YTD 2026</div>`)[0];
+                popup_f535283f9d90f84ebee94c49314d2b33.setContent(html_8b31eb372087912fefd563a48e8a5b1b);
             
         
 
-        marker_6ae88a68f522c5ae0184bbd7132ded09.bindPopup(popup_638b5166781565c58e7719da22c88231)
+        marker_810dfc64bef1e6ad3b35de0391cfea37.bindPopup(popup_f535283f9d90f84ebee94c49314d2b33)
         ;
 
         
     
     
-            marker_6ae88a68f522c5ae0184bbd7132ded09.bindTooltip(
+            marker_810dfc64bef1e6ad3b35de0391cfea37.bindTooltip(
                 `<div>
                      <div><b>San Diego Animal Control</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1136,17 +1144,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_6ae88a68f522c5ae0184bbd7132ded09.setIcon(div_icon_529db3f0aab066bc42184da65faf770c);
+                marker_810dfc64bef1e6ad3b35de0391cfea37.setIcon(div_icon_f6d860e1ec220c52605573a3919726bf);
             
     
-            var marker_d2e800503a1f33ac39f68734d21a6052 = L.marker(
+            var marker_de61240936baae8c99edf9f071465522 = L.marker(
                 [30.647, -96.3763],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_3fd407583d7a8bcd0f108576e18191d2 = L.divIcon({
+            var div_icon_90cd82ca3078dfac7501bbbddcb4cd78 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.512px;height:11.512px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.244px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1154,24 +1162,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_bdb8f8e4e9c4ef4c3f5a963cc9aee1ab = L.popup({
+        var popup_49fb7620aa4104f559c4a549c0258ff4 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_fdce97899a62aa0e6d4c97f221ec181a = $(`<div id="html_fdce97899a62aa0e6d4c97f221ec181a" style="width: 100.0%; height: 100.0%;"><b>Bryan Animal Center</b><br>APA Partner Shelter<br>63 intakes YTD 2026</div>`)[0];
-                popup_bdb8f8e4e9c4ef4c3f5a963cc9aee1ab.setContent(html_fdce97899a62aa0e6d4c97f221ec181a);
+                var html_4ea1ade811c7a73c55ee3b2e5f7fc6d4 = $(`<div id="html_4ea1ade811c7a73c55ee3b2e5f7fc6d4" style="width: 100.0%; height: 100.0%;"><b>Bryan Animal Center</b><br>APA Partner Shelter<br>63 intakes YTD 2026</div>`)[0];
+                popup_49fb7620aa4104f559c4a549c0258ff4.setContent(html_4ea1ade811c7a73c55ee3b2e5f7fc6d4);
             
         
 
-        marker_d2e800503a1f33ac39f68734d21a6052.bindPopup(popup_bdb8f8e4e9c4ef4c3f5a963cc9aee1ab)
+        marker_de61240936baae8c99edf9f071465522.bindPopup(popup_49fb7620aa4104f559c4a549c0258ff4)
         ;
 
         
     
     
-            marker_d2e800503a1f33ac39f68734d21a6052.bindTooltip(
+            marker_de61240936baae8c99edf9f071465522.bindTooltip(
                 `<div>
                      <div><b>Bryan Animal Center</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1181,17 +1189,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_d2e800503a1f33ac39f68734d21a6052.setIcon(div_icon_3fd407583d7a8bcd0f108576e18191d2);
+                marker_de61240936baae8c99edf9f071465522.setIcon(div_icon_90cd82ca3078dfac7501bbbddcb4cd78);
             
     
-            var marker_0e59ac73a2d79a6b8238ff1ff7b761e8 = L.marker(
+            var marker_03bec6ded38981ba27e7243871ba94c5 = L.marker(
                 [28.6645, -99.1457],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_9743f782d38fede40a1f9367636b45cd = L.divIcon({
+            var div_icon_fd89efa635c8cd8c0fe64da4e78d5a78 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.368px;height:11.368px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.315999999999999px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1199,24 +1207,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_9f89fb7e8133e192520e570d96459951 = L.popup({
+        var popup_40ddf910a03f03d4b2b1c0cc2f838078 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_326d41825dcbd8909ebbe31065bf19b0 = $(`<div id="html_326d41825dcbd8909ebbe31065bf19b0" style="width: 100.0%; height: 100.0%;"><b>City of Dilley Animal Shelter</b><br>APA Partner Shelter<br>57 intakes YTD 2026</div>`)[0];
-                popup_9f89fb7e8133e192520e570d96459951.setContent(html_326d41825dcbd8909ebbe31065bf19b0);
+                var html_54ccdad653111ee53d78f4723b519ace = $(`<div id="html_54ccdad653111ee53d78f4723b519ace" style="width: 100.0%; height: 100.0%;"><b>City of Dilley Animal Shelter</b><br>APA Partner Shelter<br>57 intakes YTD 2026</div>`)[0];
+                popup_40ddf910a03f03d4b2b1c0cc2f838078.setContent(html_54ccdad653111ee53d78f4723b519ace);
             
         
 
-        marker_0e59ac73a2d79a6b8238ff1ff7b761e8.bindPopup(popup_9f89fb7e8133e192520e570d96459951)
+        marker_03bec6ded38981ba27e7243871ba94c5.bindPopup(popup_40ddf910a03f03d4b2b1c0cc2f838078)
         ;
 
         
     
     
-            marker_0e59ac73a2d79a6b8238ff1ff7b761e8.bindTooltip(
+            marker_03bec6ded38981ba27e7243871ba94c5.bindTooltip(
                 `<div>
                      <div><b>City of Dilley Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1226,17 +1234,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_0e59ac73a2d79a6b8238ff1ff7b761e8.setIcon(div_icon_9743f782d38fede40a1f9367636b45cd);
+                marker_03bec6ded38981ba27e7243871ba94c5.setIcon(div_icon_fd89efa635c8cd8c0fe64da4e78d5a78);
             
     
-            var marker_86285f2bcb96ffab675a0fa17b2255e3 = L.marker(
+            var marker_c82bb0dac28f0be80f4577d32b678a3d = L.marker(
                 [29.8692, -97.9271],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_dbf90ac1652716155d726add20a93ff2 = L.divIcon({
+            var div_icon_262140aaf157172e57f466a311228d5a = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.2px;height:11.2px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.4px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1244,24 +1252,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_88b4fdcf54edad32db02ff81e8941fd5 = L.popup({
+        var popup_9075beff9071f4f7e23a223dfca76c36 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_066ab587964fd68fe14561aa8e6dd4dc = $(`<div id="html_066ab587964fd68fe14561aa8e6dd4dc" style="width: 100.0%; height: 100.0%;"><b>San Marcos Regional Animal Shelter</b><br>APA Partner Shelter<br>50 intakes YTD 2026</div>`)[0];
-                popup_88b4fdcf54edad32db02ff81e8941fd5.setContent(html_066ab587964fd68fe14561aa8e6dd4dc);
+                var html_c3dc0bac9c769fa18a89488a7866503a = $(`<div id="html_c3dc0bac9c769fa18a89488a7866503a" style="width: 100.0%; height: 100.0%;"><b>San Marcos Regional Animal Shelter</b><br>APA Partner Shelter<br>50 intakes YTD 2026</div>`)[0];
+                popup_9075beff9071f4f7e23a223dfca76c36.setContent(html_c3dc0bac9c769fa18a89488a7866503a);
             
         
 
-        marker_86285f2bcb96ffab675a0fa17b2255e3.bindPopup(popup_88b4fdcf54edad32db02ff81e8941fd5)
+        marker_c82bb0dac28f0be80f4577d32b678a3d.bindPopup(popup_9075beff9071f4f7e23a223dfca76c36)
         ;
 
         
     
     
-            marker_86285f2bcb96ffab675a0fa17b2255e3.bindTooltip(
+            marker_c82bb0dac28f0be80f4577d32b678a3d.bindTooltip(
                 `<div>
                      <div><b>San Marcos Regional Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1271,17 +1279,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_86285f2bcb96ffab675a0fa17b2255e3.setIcon(div_icon_dbf90ac1652716155d726add20a93ff2);
+                marker_c82bb0dac28f0be80f4577d32b678a3d.setIcon(div_icon_262140aaf157172e57f466a311228d5a);
             
     
-            var marker_94c02d507485ba2681f91ba2412cc068 = L.marker(
+            var marker_c1846ff46a6f0967278096177225e72c = L.marker(
                 [30.4882, -99.7578],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_0e95478e261d8becf49df95dd8ff35e7 = L.divIcon({
+            var div_icon_12b65ea57bc038d9d923ddd1774acc8d = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.152000000000001px;height:11.152000000000001px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.424px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1289,24 +1297,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_9e77c6ab753980f172f2db76b6d0c587 = L.popup({
+        var popup_f52f5d630313c9fe50c1c2f56533d6c3 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_1a3505cdf7bfc8c4eb5f39e149b5ed5f = $(`<div id="html_1a3505cdf7bfc8c4eb5f39e149b5ed5f" style="width: 100.0%; height: 100.0%;"><b>Sam Coffey Animal Rescue Friends</b><br>APA Partner Shelter<br>48 intakes YTD 2026</div>`)[0];
-                popup_9e77c6ab753980f172f2db76b6d0c587.setContent(html_1a3505cdf7bfc8c4eb5f39e149b5ed5f);
+                var html_f65bc33d6894f136c30b7b70ed8ada72 = $(`<div id="html_f65bc33d6894f136c30b7b70ed8ada72" style="width: 100.0%; height: 100.0%;"><b>Sam Coffey Animal Rescue Friends</b><br>APA Partner Shelter<br>48 intakes YTD 2026</div>`)[0];
+                popup_f52f5d630313c9fe50c1c2f56533d6c3.setContent(html_f65bc33d6894f136c30b7b70ed8ada72);
             
         
 
-        marker_94c02d507485ba2681f91ba2412cc068.bindPopup(popup_9e77c6ab753980f172f2db76b6d0c587)
+        marker_c1846ff46a6f0967278096177225e72c.bindPopup(popup_f52f5d630313c9fe50c1c2f56533d6c3)
         ;
 
         
     
     
-            marker_94c02d507485ba2681f91ba2412cc068.bindTooltip(
+            marker_c1846ff46a6f0967278096177225e72c.bindTooltip(
                 `<div>
                      <div><b>Sam Coffey Animal Rescue Friends</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1316,17 +1324,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_94c02d507485ba2681f91ba2412cc068.setIcon(div_icon_0e95478e261d8becf49df95dd8ff35e7);
+                marker_c1846ff46a6f0967278096177225e72c.setIcon(div_icon_12b65ea57bc038d9d923ddd1774acc8d);
             
     
-            var marker_9d556550d74852850c6a41523d8e8108 = L.marker(
+            var marker_e0a4c59e4dfc23a3f77b591af408211c = L.marker(
                 [29.8685, -97.6406],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_06010c6b8577017b250ca5e1a1c61340 = L.divIcon({
+            var div_icon_2b056dbe6a1e8e4fe70c5881c365af44 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.032px;height:11.032px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.484px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1334,24 +1342,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_68d7217207349c1693572ef556aec197 = L.popup({
+        var popup_41a1321f96d4596fc03012a9395fe4fb = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_d7cc21fe41439a0f3c3467528755651b = $(`<div id="html_d7cc21fe41439a0f3c3467528755651b" style="width: 100.0%; height: 100.0%;"><b>Lockhart Animal Shelter</b><br>APA Partner Shelter<br>43 intakes YTD 2026</div>`)[0];
-                popup_68d7217207349c1693572ef556aec197.setContent(html_d7cc21fe41439a0f3c3467528755651b);
+                var html_39d16634d2b264281ed06faead5b94e7 = $(`<div id="html_39d16634d2b264281ed06faead5b94e7" style="width: 100.0%; height: 100.0%;"><b>Lockhart Animal Shelter</b><br>APA Partner Shelter<br>43 intakes YTD 2026</div>`)[0];
+                popup_41a1321f96d4596fc03012a9395fe4fb.setContent(html_39d16634d2b264281ed06faead5b94e7);
             
         
 
-        marker_9d556550d74852850c6a41523d8e8108.bindPopup(popup_68d7217207349c1693572ef556aec197)
+        marker_e0a4c59e4dfc23a3f77b591af408211c.bindPopup(popup_41a1321f96d4596fc03012a9395fe4fb)
         ;
 
         
     
     
-            marker_9d556550d74852850c6a41523d8e8108.bindTooltip(
+            marker_e0a4c59e4dfc23a3f77b591af408211c.bindTooltip(
                 `<div>
                      <div><b>Lockhart Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1361,17 +1369,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_9d556550d74852850c6a41523d8e8108.setIcon(div_icon_06010c6b8577017b250ca5e1a1c61340);
+                marker_e0a4c59e4dfc23a3f77b591af408211c.setIcon(div_icon_2b056dbe6a1e8e4fe70c5881c365af44);
             
     
-            var marker_93916045e7b326168c0371fabb8ef136 = L.marker(
+            var marker_de52dc4dc148d67d5852d4b6c0af2411 = L.marker(
                 [30.5721, -98.2774],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_4a151c7489c1259b08c14872c64d7689 = L.divIcon({
+            var div_icon_a451c8dc615a183cbf4a1c9f30a0e750 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:11.008px;height:11.008px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.496px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1379,24 +1387,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_4ebf892baa9c472c12da303d5cdef0a2 = L.popup({
+        var popup_a89e5fa483b8c8695a50e2926cb6b86e = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_103af35f52f3267bdffb2a504ad42673 = $(`<div id="html_103af35f52f3267bdffb2a504ad42673" style="width: 100.0%; height: 100.0%;"><b>Living Love Animal Rescue</b><br>APA Partner Shelter<br>42 intakes YTD 2026</div>`)[0];
-                popup_4ebf892baa9c472c12da303d5cdef0a2.setContent(html_103af35f52f3267bdffb2a504ad42673);
+                var html_cd81d18d7d5ba1d9488afd0b52eb54db = $(`<div id="html_cd81d18d7d5ba1d9488afd0b52eb54db" style="width: 100.0%; height: 100.0%;"><b>Living Love Animal Rescue</b><br>APA Partner Shelter<br>42 intakes YTD 2026</div>`)[0];
+                popup_a89e5fa483b8c8695a50e2926cb6b86e.setContent(html_cd81d18d7d5ba1d9488afd0b52eb54db);
             
         
 
-        marker_93916045e7b326168c0371fabb8ef136.bindPopup(popup_4ebf892baa9c472c12da303d5cdef0a2)
+        marker_de52dc4dc148d67d5852d4b6c0af2411.bindPopup(popup_a89e5fa483b8c8695a50e2926cb6b86e)
         ;
 
         
     
     
-            marker_93916045e7b326168c0371fabb8ef136.bindTooltip(
+            marker_de52dc4dc148d67d5852d4b6c0af2411.bindTooltip(
                 `<div>
                      <div><b>Living Love Animal Rescue</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1406,17 +1414,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_93916045e7b326168c0371fabb8ef136.setIcon(div_icon_4a151c7489c1259b08c14872c64d7689);
+                marker_de52dc4dc148d67d5852d4b6c0af2411.setIcon(div_icon_a451c8dc615a183cbf4a1c9f30a0e750);
             
     
-            var marker_3b604f85cf78041af9c73a6840005c55 = L.marker(
+            var marker_66dd28543fff4471a48d24e095d530c3 = L.marker(
                 [29.1377, -97.3063],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_bccf820351126b9770c88827df8939ea = L.divIcon({
+            var div_icon_180185744d5a6598186c37133a03e516 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.911999999999999px;height:10.911999999999999px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.544px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1424,24 +1432,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_23da3ba803994ba7e71b62430428d1b9 = L.popup({
+        var popup_cf9fadb778fcefd9b794a24cea35deda = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_35046e24858bb59516dff16ee0cd1f1a = $(`<div id="html_35046e24858bb59516dff16ee0cd1f1a" style="width: 100.0%; height: 100.0%;"><b>City of Cuero Animal Control</b><br>APA Partner Shelter<br>38 intakes YTD 2026</div>`)[0];
-                popup_23da3ba803994ba7e71b62430428d1b9.setContent(html_35046e24858bb59516dff16ee0cd1f1a);
+                var html_c30b2e1ce74254574c947b33ae221450 = $(`<div id="html_c30b2e1ce74254574c947b33ae221450" style="width: 100.0%; height: 100.0%;"><b>City of Cuero Animal Control</b><br>APA Partner Shelter<br>38 intakes YTD 2026</div>`)[0];
+                popup_cf9fadb778fcefd9b794a24cea35deda.setContent(html_c30b2e1ce74254574c947b33ae221450);
             
         
 
-        marker_3b604f85cf78041af9c73a6840005c55.bindPopup(popup_23da3ba803994ba7e71b62430428d1b9)
+        marker_66dd28543fff4471a48d24e095d530c3.bindPopup(popup_cf9fadb778fcefd9b794a24cea35deda)
         ;
 
         
     
     
-            marker_3b604f85cf78041af9c73a6840005c55.bindTooltip(
+            marker_66dd28543fff4471a48d24e095d530c3.bindTooltip(
                 `<div>
                      <div><b>City of Cuero Animal Control</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1451,17 +1459,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_3b604f85cf78041af9c73a6840005c55.setIcon(div_icon_bccf820351126b9770c88827df8939ea);
+                marker_66dd28543fff4471a48d24e095d530c3.setIcon(div_icon_180185744d5a6598186c37133a03e516);
             
     
-            var marker_6ee6ca02809717b4704ac1182e891ff9 = L.marker(
+            var marker_b7615e73b3a39819fb61704466e2ffe9 = L.marker(
                 [30.0952, -97.5467],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_c4ffbe2811770f27e8e1a3e9f40793dd = L.divIcon({
+            var div_icon_80f297b094c79429c034a9d6bd0fa9fd = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.792px;height:10.792px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.604px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1469,24 +1477,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_d1764272e08479ff49a558612a0b95d2 = L.popup({
+        var popup_400ca132d1bf308b0efd847bf4a6f28b = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_bfda5d3603a0cd76fd14b8838f39aaa0 = $(`<div id="html_bfda5d3603a0cd76fd14b8838f39aaa0" style="width: 100.0%; height: 100.0%;"><b>Bastrop Cats Anonymous</b><br>APA Partner Shelter<br>33 intakes YTD 2026</div>`)[0];
-                popup_d1764272e08479ff49a558612a0b95d2.setContent(html_bfda5d3603a0cd76fd14b8838f39aaa0);
+                var html_67d7c6001bff597a9a7e506722511a2f = $(`<div id="html_67d7c6001bff597a9a7e506722511a2f" style="width: 100.0%; height: 100.0%;"><b>Bastrop Cats Anonymous</b><br>APA Partner Shelter<br>33 intakes YTD 2026</div>`)[0];
+                popup_400ca132d1bf308b0efd847bf4a6f28b.setContent(html_67d7c6001bff597a9a7e506722511a2f);
             
         
 
-        marker_6ee6ca02809717b4704ac1182e891ff9.bindPopup(popup_d1764272e08479ff49a558612a0b95d2)
+        marker_b7615e73b3a39819fb61704466e2ffe9.bindPopup(popup_400ca132d1bf308b0efd847bf4a6f28b)
         ;
 
         
     
     
-            marker_6ee6ca02809717b4704ac1182e891ff9.bindTooltip(
+            marker_b7615e73b3a39819fb61704466e2ffe9.bindTooltip(
                 `<div>
                      <div><b>Bastrop Cats Anonymous</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1496,17 +1504,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_6ee6ca02809717b4704ac1182e891ff9.setIcon(div_icon_c4ffbe2811770f27e8e1a3e9f40793dd);
+                marker_b7615e73b3a39819fb61704466e2ffe9.setIcon(div_icon_80f297b094c79429c034a9d6bd0fa9fd);
             
     
-            var marker_3095b98c88ca66815d282919f159d094 = L.marker(
+            var marker_0613f210979bc4d0c9a90f4361897c85 = L.marker(
                 [30.3147, -95.4364],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_e4c55880d99585731caa2aca9dbfd6a8 = L.divIcon({
+            var div_icon_261ae4f7d370edeea4391078a1a7fbd3 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.744px;height:10.744px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.628px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1514,24 +1522,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_14cdc3bf55add6845848cd5e49821a5d = L.popup({
+        var popup_7055f740f1c6b14080963353063bef41 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_89da12498cd0ab6bb33e100ea4500399 = $(`<div id="html_89da12498cd0ab6bb33e100ea4500399" style="width: 100.0%; height: 100.0%;"><b>Montgomery County Animal Shelter</b><br>APA Partner Shelter<br>31 intakes YTD 2026</div>`)[0];
-                popup_14cdc3bf55add6845848cd5e49821a5d.setContent(html_89da12498cd0ab6bb33e100ea4500399);
+                var html_d8b00a01d374e73d5f36ab67b4643363 = $(`<div id="html_d8b00a01d374e73d5f36ab67b4643363" style="width: 100.0%; height: 100.0%;"><b>Montgomery County Animal Shelter</b><br>APA Partner Shelter<br>31 intakes YTD 2026</div>`)[0];
+                popup_7055f740f1c6b14080963353063bef41.setContent(html_d8b00a01d374e73d5f36ab67b4643363);
             
         
 
-        marker_3095b98c88ca66815d282919f159d094.bindPopup(popup_14cdc3bf55add6845848cd5e49821a5d)
+        marker_0613f210979bc4d0c9a90f4361897c85.bindPopup(popup_7055f740f1c6b14080963353063bef41)
         ;
 
         
     
     
-            marker_3095b98c88ca66815d282919f159d094.bindTooltip(
+            marker_0613f210979bc4d0c9a90f4361897c85.bindTooltip(
                 `<div>
                      <div><b>Montgomery County Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1541,17 +1549,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_3095b98c88ca66815d282919f159d094.setIcon(div_icon_e4c55880d99585731caa2aca9dbfd6a8);
+                marker_0613f210979bc4d0c9a90f4361897c85.setIcon(div_icon_261ae4f7d370edeea4391078a1a7fbd3);
             
     
-            var marker_524140ea3f570a0fdc7fa530716724c0 = L.marker(
+            var marker_318b8ef654fb3be66e5531343f84e2b0 = L.marker(
                 [30.3668, -103.6228],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_ce1edfc2a78b5f41539ce1221877c272 = L.divIcon({
+            var div_icon_8246011fee5e29af0284b50daaaa3ed7 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.696px;height:10.696px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.652000000000001px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1559,24 +1567,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_5ea391753121dc0e17530b248f987562 = L.popup({
+        var popup_b93c7fde68f1016b91faefbf71aa03a1 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_41d9512cc3547295af12c3c8bd62d506 = $(`<div id="html_41d9512cc3547295af12c3c8bd62d506" style="width: 100.0%; height: 100.0%;"><b>Alpine Animal Services</b><br>APA Partner Shelter<br>29 intakes YTD 2026</div>`)[0];
-                popup_5ea391753121dc0e17530b248f987562.setContent(html_41d9512cc3547295af12c3c8bd62d506);
+                var html_0a83e971b97b5526024c02f3033b04f9 = $(`<div id="html_0a83e971b97b5526024c02f3033b04f9" style="width: 100.0%; height: 100.0%;"><b>Alpine Animal Services</b><br>APA Partner Shelter<br>29 intakes YTD 2026</div>`)[0];
+                popup_b93c7fde68f1016b91faefbf71aa03a1.setContent(html_0a83e971b97b5526024c02f3033b04f9);
             
         
 
-        marker_524140ea3f570a0fdc7fa530716724c0.bindPopup(popup_5ea391753121dc0e17530b248f987562)
+        marker_318b8ef654fb3be66e5531343f84e2b0.bindPopup(popup_b93c7fde68f1016b91faefbf71aa03a1)
         ;
 
         
     
     
-            marker_524140ea3f570a0fdc7fa530716724c0.bindTooltip(
+            marker_318b8ef654fb3be66e5531343f84e2b0.bindTooltip(
                 `<div>
                      <div><b>Alpine Animal Services</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1586,17 +1594,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_524140ea3f570a0fdc7fa530716724c0.setIcon(div_icon_ce1edfc2a78b5f41539ce1221877c272);
+                marker_318b8ef654fb3be66e5531343f84e2b0.setIcon(div_icon_8246011fee5e29af0284b50daaaa3ed7);
             
     
-            var marker_cd63ab342ae4e18e52bfabec3580791b = L.marker(
+            var marker_def8ae84ab685168b6c0442a4c9640eb = L.marker(
                 [30.1293, -94.0135],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_319163287a8aa4579c77bb9d68536544 = L.divIcon({
+            var div_icon_5316a3d177d4f5a6c57286214fa7c80c = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.648px;height:10.648px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.676px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1604,24 +1612,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_72edc98cf7e6ea5eb7a04fac61294c34 = L.popup({
+        var popup_732aa408e75887ffb94f824bb433c124 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_8d22cdbe9dd760b618c4a5937d089cf0 = $(`<div id="html_8d22cdbe9dd760b618c4a5937d089cf0" style="width: 100.0%; height: 100.0%;"><b>Guardians for the Animals</b><br>APA Partner Shelter<br>27 intakes YTD 2026</div>`)[0];
-                popup_72edc98cf7e6ea5eb7a04fac61294c34.setContent(html_8d22cdbe9dd760b618c4a5937d089cf0);
+                var html_4affbad1b0fb91d48c2bd8ef98c6d367 = $(`<div id="html_4affbad1b0fb91d48c2bd8ef98c6d367" style="width: 100.0%; height: 100.0%;"><b>Guardians for the Animals</b><br>APA Partner Shelter<br>27 intakes YTD 2026</div>`)[0];
+                popup_732aa408e75887ffb94f824bb433c124.setContent(html_4affbad1b0fb91d48c2bd8ef98c6d367);
             
         
 
-        marker_cd63ab342ae4e18e52bfabec3580791b.bindPopup(popup_72edc98cf7e6ea5eb7a04fac61294c34)
+        marker_def8ae84ab685168b6c0442a4c9640eb.bindPopup(popup_732aa408e75887ffb94f824bb433c124)
         ;
 
         
     
     
-            marker_cd63ab342ae4e18e52bfabec3580791b.bindTooltip(
+            marker_def8ae84ab685168b6c0442a4c9640eb.bindTooltip(
                 `<div>
                      <div><b>Guardians for the Animals</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1631,17 +1639,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_cd63ab342ae4e18e52bfabec3580791b.setIcon(div_icon_319163287a8aa4579c77bb9d68536544);
+                marker_def8ae84ab685168b6c0442a4c9640eb.setIcon(div_icon_5316a3d177d4f5a6c57286214fa7c80c);
             
     
-            var marker_4fdd6755bcea0410bda7bc2add459ee3 = L.marker(
+            var marker_0aa848189ed09c610f62057aa213d2c2 = L.marker(
                 [30.7363, -98.4659],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_0f9def9169e09b5dbc6ef798290ef6a0 = L.divIcon({
+            var div_icon_ad14d54306ae727ab6129688c10a19d8 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.504px;height:10.504px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.748000000000001px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1649,24 +1657,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_b1fb27ca018f6a4957e6710b4a3732c2 = L.popup({
+        var popup_2e8bf93c3453b12a9550508a75fbb976 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_6222254599691a7c87bf71dad15a64ba = $(`<div id="html_6222254599691a7c87bf71dad15a64ba" style="width: 100.0%; height: 100.0%;"><b>Hill Country Humane Society</b><br>APA Partner Shelter<br>21 intakes YTD 2026</div>`)[0];
-                popup_b1fb27ca018f6a4957e6710b4a3732c2.setContent(html_6222254599691a7c87bf71dad15a64ba);
+                var html_c8b66f8cef50a9ef7570af02011e1c16 = $(`<div id="html_c8b66f8cef50a9ef7570af02011e1c16" style="width: 100.0%; height: 100.0%;"><b>Hill Country Humane Society</b><br>APA Partner Shelter<br>21 intakes YTD 2026</div>`)[0];
+                popup_2e8bf93c3453b12a9550508a75fbb976.setContent(html_c8b66f8cef50a9ef7570af02011e1c16);
             
         
 
-        marker_4fdd6755bcea0410bda7bc2add459ee3.bindPopup(popup_b1fb27ca018f6a4957e6710b4a3732c2)
+        marker_0aa848189ed09c610f62057aa213d2c2.bindPopup(popup_2e8bf93c3453b12a9550508a75fbb976)
         ;
 
         
     
     
-            marker_4fdd6755bcea0410bda7bc2add459ee3.bindTooltip(
+            marker_0aa848189ed09c610f62057aa213d2c2.bindTooltip(
                 `<div>
                      <div><b>Hill Country Humane Society</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1676,17 +1684,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_4fdd6755bcea0410bda7bc2add459ee3.setIcon(div_icon_0f9def9169e09b5dbc6ef798290ef6a0);
+                marker_0aa848189ed09c610f62057aa213d2c2.setIcon(div_icon_ad14d54306ae727ab6129688c10a19d8);
             
     
-            var marker_28ca3ea75b0021b7714c09052728567c = L.marker(
+            var marker_ed2f79d15adbfba40e2727ccec7adb63 = L.marker(
                 [30.0943, -93.7561],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_737dd9356327856932a5ffb8e55d50bb = L.divIcon({
+            var div_icon_83559bea6ff757f458de40c1389ab433 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.48px;height:10.48px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.76px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1694,24 +1702,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_9c35ebaa74866ceb362c6f1c420caa0d = L.popup({
+        var popup_c2803b961d05cc6ee68e7d66679e4008 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_6a9f318e3153c61f30ecfda22f80e1b0 = $(`<div id="html_6a9f318e3153c61f30ecfda22f80e1b0" style="width: 100.0%; height: 100.0%;"><b>Friends of Ferals</b><br>APA Partner Shelter<br>20 intakes YTD 2026</div>`)[0];
-                popup_9c35ebaa74866ceb362c6f1c420caa0d.setContent(html_6a9f318e3153c61f30ecfda22f80e1b0);
+                var html_8fe7709670291ed195109596aa3d925b = $(`<div id="html_8fe7709670291ed195109596aa3d925b" style="width: 100.0%; height: 100.0%;"><b>Friends of Ferals</b><br>APA Partner Shelter<br>20 intakes YTD 2026</div>`)[0];
+                popup_c2803b961d05cc6ee68e7d66679e4008.setContent(html_8fe7709670291ed195109596aa3d925b);
             
         
 
-        marker_28ca3ea75b0021b7714c09052728567c.bindPopup(popup_9c35ebaa74866ceb362c6f1c420caa0d)
+        marker_ed2f79d15adbfba40e2727ccec7adb63.bindPopup(popup_c2803b961d05cc6ee68e7d66679e4008)
         ;
 
         
     
     
-            marker_28ca3ea75b0021b7714c09052728567c.bindTooltip(
+            marker_ed2f79d15adbfba40e2727ccec7adb63.bindTooltip(
                 `<div>
                      <div><b>Friends of Ferals</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1721,17 +1729,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_28ca3ea75b0021b7714c09052728567c.setIcon(div_icon_737dd9356327856932a5ffb8e55d50bb);
+                marker_ed2f79d15adbfba40e2727ccec7adb63.setIcon(div_icon_83559bea6ff757f458de40c1389ab433);
             
     
-            var marker_8739449acb33b2f98a38c3a584493921 = L.marker(
+            var marker_e4f89937837bcd4015a205b8065faac0 = L.marker(
                 [28.8053, -97.0036],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_616ba45d9ec63a9222f0cbc7e79a1135 = L.divIcon({
+            var div_icon_cd3720a5d105c67798343ca876dd5026 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.432px;height:10.432px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.783999999999999px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1739,24 +1747,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_12c6b98851f61e80dd5770493274bbb9 = L.popup({
+        var popup_e980be66e0c96130a43fd3559b1128e4 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_709da3a950484d35d9d0fb2ef4bccf50 = $(`<div id="html_709da3a950484d35d9d0fb2ef4bccf50" style="width: 100.0%; height: 100.0%;"><b>Victoria Animal Control</b><br>APA Partner Shelter<br>18 intakes YTD 2026</div>`)[0];
-                popup_12c6b98851f61e80dd5770493274bbb9.setContent(html_709da3a950484d35d9d0fb2ef4bccf50);
+                var html_2ba4f880d94aa8b91a6de6c1bd46b258 = $(`<div id="html_2ba4f880d94aa8b91a6de6c1bd46b258" style="width: 100.0%; height: 100.0%;"><b>Victoria Animal Control</b><br>APA Partner Shelter<br>18 intakes YTD 2026</div>`)[0];
+                popup_e980be66e0c96130a43fd3559b1128e4.setContent(html_2ba4f880d94aa8b91a6de6c1bd46b258);
             
         
 
-        marker_8739449acb33b2f98a38c3a584493921.bindPopup(popup_12c6b98851f61e80dd5770493274bbb9)
+        marker_e4f89937837bcd4015a205b8065faac0.bindPopup(popup_e980be66e0c96130a43fd3559b1128e4)
         ;
 
         
     
     
-            marker_8739449acb33b2f98a38c3a584493921.bindTooltip(
+            marker_e4f89937837bcd4015a205b8065faac0.bindTooltip(
                 `<div>
                      <div><b>Victoria Animal Control</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1766,17 +1774,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_8739449acb33b2f98a38c3a584493921.setIcon(div_icon_616ba45d9ec63a9222f0cbc7e79a1135);
+                marker_e4f89937837bcd4015a205b8065faac0.setIcon(div_icon_cd3720a5d105c67798343ca876dd5026);
             
     
-            var marker_d28e8bc2e56942c9675999e2f3d4e163 = L.marker(
+            var marker_51ef56a2b1055d541c5378d93c2a105b = L.marker(
                 [29.6764, -97.6341],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_09badd666624e2c7008b0fb079cedf40 = L.divIcon({
+            var div_icon_3b35dedf77dd0becc7cd3cbfdd605586 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.384px;height:10.384px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.808px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1784,24 +1792,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_4ef743e867f503b8ede4c47951a8242e = L.popup({
+        var popup_14e04ef1be04361d44b1f79dde40d621 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_ea2d90b8a558e4ffa7ca89a47bf55fe7 = $(`<div id="html_ea2d90b8a558e4ffa7ca89a47bf55fe7" style="width: 100.0%; height: 100.0%;"><b>Luling Animal Welfare Society</b><br>APA Partner Shelter<br>16 intakes YTD 2026</div>`)[0];
-                popup_4ef743e867f503b8ede4c47951a8242e.setContent(html_ea2d90b8a558e4ffa7ca89a47bf55fe7);
+                var html_f232ecbd68c726e41bdeeefdeb39693e = $(`<div id="html_f232ecbd68c726e41bdeeefdeb39693e" style="width: 100.0%; height: 100.0%;"><b>Luling Animal Welfare Society</b><br>APA Partner Shelter<br>16 intakes YTD 2026</div>`)[0];
+                popup_14e04ef1be04361d44b1f79dde40d621.setContent(html_f232ecbd68c726e41bdeeefdeb39693e);
             
         
 
-        marker_d28e8bc2e56942c9675999e2f3d4e163.bindPopup(popup_4ef743e867f503b8ede4c47951a8242e)
+        marker_51ef56a2b1055d541c5378d93c2a105b.bindPopup(popup_14e04ef1be04361d44b1f79dde40d621)
         ;
 
         
     
     
-            marker_d28e8bc2e56942c9675999e2f3d4e163.bindTooltip(
+            marker_51ef56a2b1055d541c5378d93c2a105b.bindTooltip(
                 `<div>
                      <div><b>Luling Animal Welfare Society</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1811,17 +1819,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_d28e8bc2e56942c9675999e2f3d4e163.setIcon(div_icon_09badd666624e2c7008b0fb079cedf40);
+                marker_51ef56a2b1055d541c5378d93c2a105b.setIcon(div_icon_3b35dedf77dd0becc7cd3cbfdd605586);
             
     
-            var marker_a33212d12b14e7aacf1bc341b3b1735f = L.marker(
+            var marker_627ad94c25357faf1bc7d15a7783d648 = L.marker(
                 [30.08, -94.1266],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_196c3b8fe938f6ae749f15a03e79c7fd = L.divIcon({
+            var div_icon_acf4c06fcc79de1adee657b063dce411 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.36px;height:10.36px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.82px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1829,24 +1837,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_d7e1982d6181f14b2cb6fc64e4fb9e21 = L.popup({
+        var popup_d623798ef9178a36350629df7bdc2fa6 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_4d8693ba09d1a54f75457f361bef6f37 = $(`<div id="html_4d8693ba09d1a54f75457f361bef6f37" style="width: 100.0%; height: 100.0%;"><b>Beaumont Animal Care</b><br>APA Partner Shelter<br>15 intakes YTD 2026</div>`)[0];
-                popup_d7e1982d6181f14b2cb6fc64e4fb9e21.setContent(html_4d8693ba09d1a54f75457f361bef6f37);
+                var html_5b59e2560a9ca328bfe51736d7ff15f5 = $(`<div id="html_5b59e2560a9ca328bfe51736d7ff15f5" style="width: 100.0%; height: 100.0%;"><b>Beaumont Animal Care</b><br>APA Partner Shelter<br>15 intakes YTD 2026</div>`)[0];
+                popup_d623798ef9178a36350629df7bdc2fa6.setContent(html_5b59e2560a9ca328bfe51736d7ff15f5);
             
         
 
-        marker_a33212d12b14e7aacf1bc341b3b1735f.bindPopup(popup_d7e1982d6181f14b2cb6fc64e4fb9e21)
+        marker_627ad94c25357faf1bc7d15a7783d648.bindPopup(popup_d623798ef9178a36350629df7bdc2fa6)
         ;
 
         
     
     
-            marker_a33212d12b14e7aacf1bc341b3b1735f.bindTooltip(
+            marker_627ad94c25357faf1bc7d15a7783d648.bindTooltip(
                 `<div>
                      <div><b>Beaumont Animal Care</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1856,17 +1864,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_a33212d12b14e7aacf1bc341b3b1735f.setIcon(div_icon_196c3b8fe938f6ae749f15a03e79c7fd);
+                marker_627ad94c25357faf1bc7d15a7783d648.setIcon(div_icon_acf4c06fcc79de1adee657b063dce411);
             
     
-            var marker_c43e6da25083629c849ea6b95a394297 = L.marker(
+            var marker_d303cc71f148aa95a3e09808cc0f18aa = L.marker(
                 [29.8355, -97.6144],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_71ab5a6f9196d26a197ae05432c6cdb8 = L.divIcon({
+            var div_icon_cf009918bb2f2203733a67d87a103aef = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.336px;height:10.336px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.832px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1874,24 +1882,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_1b234e762f037f54f923ad50d7791c38 = L.popup({
+        var popup_b5a539b3d1f1fb8b298423426d63f4c7 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_53820d1cd9fdb69d6f8167b1826a17ee = $(`<div id="html_53820d1cd9fdb69d6f8167b1826a17ee" style="width: 100.0%; height: 100.0%;"><b>Caldwell County Animal Coalition (CCAC)</b><br>APA Partner Shelter<br>14 intakes YTD 2026</div>`)[0];
-                popup_1b234e762f037f54f923ad50d7791c38.setContent(html_53820d1cd9fdb69d6f8167b1826a17ee);
+                var html_fd6dd5c5ebd303c4c1209f1464730ecd = $(`<div id="html_fd6dd5c5ebd303c4c1209f1464730ecd" style="width: 100.0%; height: 100.0%;"><b>Caldwell County Animal Coalition (CCAC)</b><br>APA Partner Shelter<br>14 intakes YTD 2026</div>`)[0];
+                popup_b5a539b3d1f1fb8b298423426d63f4c7.setContent(html_fd6dd5c5ebd303c4c1209f1464730ecd);
             
         
 
-        marker_c43e6da25083629c849ea6b95a394297.bindPopup(popup_1b234e762f037f54f923ad50d7791c38)
+        marker_d303cc71f148aa95a3e09808cc0f18aa.bindPopup(popup_b5a539b3d1f1fb8b298423426d63f4c7)
         ;
 
         
     
     
-            marker_c43e6da25083629c849ea6b95a394297.bindTooltip(
+            marker_d303cc71f148aa95a3e09808cc0f18aa.bindTooltip(
                 `<div>
                      <div><b>Caldwell County Animal Coalition (CCAC)</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1901,17 +1909,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_c43e6da25083629c849ea6b95a394297.setIcon(div_icon_71ab5a6f9196d26a197ae05432c6cdb8);
+                marker_d303cc71f148aa95a3e09808cc0f18aa.setIcon(div_icon_cf009918bb2f2203733a67d87a103aef);
             
     
-            var marker_813a1cf227e33f816b56f0ff77c7db66 = L.marker(
+            var marker_c75f7ea96a3785bd33fca46c59ec9c7b = L.marker(
                 [32.653, -97.0961],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_dfd55659bc499e95a8103a6ecfb11142 = L.divIcon({
+            var div_icon_2840a32c41bd351b51ae1d788a189bc4 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.336px;height:10.336px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.832px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1919,24 +1927,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_a78291f2a3e1d54db993263ea8271788 = L.popup({
+        var popup_2825f03872ea8077c8f0fa8b00041869 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_770166bc58aca462040efcd3323973ef = $(`<div id="html_770166bc58aca462040efcd3323973ef" style="width: 100.0%; height: 100.0%;"><b>Arlington Animal Services</b><br>APA Partner Shelter<br>14 intakes YTD 2026</div>`)[0];
-                popup_a78291f2a3e1d54db993263ea8271788.setContent(html_770166bc58aca462040efcd3323973ef);
+                var html_c7d84cd6f3fe507910eb1233b98b4512 = $(`<div id="html_c7d84cd6f3fe507910eb1233b98b4512" style="width: 100.0%; height: 100.0%;"><b>Arlington Animal Services</b><br>APA Partner Shelter<br>14 intakes YTD 2026</div>`)[0];
+                popup_2825f03872ea8077c8f0fa8b00041869.setContent(html_c7d84cd6f3fe507910eb1233b98b4512);
             
         
 
-        marker_813a1cf227e33f816b56f0ff77c7db66.bindPopup(popup_a78291f2a3e1d54db993263ea8271788)
+        marker_c75f7ea96a3785bd33fca46c59ec9c7b.bindPopup(popup_2825f03872ea8077c8f0fa8b00041869)
         ;
 
         
     
     
-            marker_813a1cf227e33f816b56f0ff77c7db66.bindTooltip(
+            marker_c75f7ea96a3785bd33fca46c59ec9c7b.bindTooltip(
                 `<div>
                      <div><b>Arlington Animal Services</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1946,17 +1954,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_813a1cf227e33f816b56f0ff77c7db66.setIcon(div_icon_dfd55659bc499e95a8103a6ecfb11142);
+                marker_c75f7ea96a3785bd33fca46c59ec9c7b.setIcon(div_icon_2840a32c41bd351b51ae1d788a189bc4);
             
     
-            var marker_07a6383806b15084dbe18e69ba14af19 = L.marker(
+            var marker_8c753127fad1ce79033add17f11f2486 = L.marker(
                 [29.5603, -104.3671],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_a52c6b5f7a715e93d842850da3528feb = L.divIcon({
+            var div_icon_ef8bdcde268ceac2aa6068d37a811211 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.336px;height:10.336px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.832px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -1964,24 +1972,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_211072ddd477a4d3439b2eab4072b8dd = L.popup({
+        var popup_79aa7413ac165897f5849428095f8fa0 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_e727457613f95da3eaf457054ecef5e7 = $(`<div id="html_e727457613f95da3eaf457054ecef5e7" style="width: 100.0%; height: 100.0%;"><b>Presidio Animal Shelter</b><br>APA Partner Shelter<br>14 intakes YTD 2026</div>`)[0];
-                popup_211072ddd477a4d3439b2eab4072b8dd.setContent(html_e727457613f95da3eaf457054ecef5e7);
+                var html_b2e8dd3f01b5ea927b251072802f3292 = $(`<div id="html_b2e8dd3f01b5ea927b251072802f3292" style="width: 100.0%; height: 100.0%;"><b>Presidio Animal Shelter</b><br>APA Partner Shelter<br>14 intakes YTD 2026</div>`)[0];
+                popup_79aa7413ac165897f5849428095f8fa0.setContent(html_b2e8dd3f01b5ea927b251072802f3292);
             
         
 
-        marker_07a6383806b15084dbe18e69ba14af19.bindPopup(popup_211072ddd477a4d3439b2eab4072b8dd)
+        marker_8c753127fad1ce79033add17f11f2486.bindPopup(popup_79aa7413ac165897f5849428095f8fa0)
         ;
 
         
     
     
-            marker_07a6383806b15084dbe18e69ba14af19.bindTooltip(
+            marker_8c753127fad1ce79033add17f11f2486.bindTooltip(
                 `<div>
                      <div><b>Presidio Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -1991,17 +1999,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_07a6383806b15084dbe18e69ba14af19.setIcon(div_icon_a52c6b5f7a715e93d842850da3528feb);
+                marker_8c753127fad1ce79033add17f11f2486.setIcon(div_icon_ef8bdcde268ceac2aa6068d37a811211);
             
     
-            var marker_26d6c08029442c1683387fd117c30076 = L.marker(
+            var marker_97c971ec9f67964b4e6b3989a3295518 = L.marker(
                 [32.738, -96.4639],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_7ff7e4a7ecdb989abe2e34ef68826ab3 = L.divIcon({
+            var div_icon_87b4b7daeced6e4ce63a09e73a994b30 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.312px;height:10.312px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.844000000000001px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -2009,24 +2017,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_a63ccb01e0ab6d14bbd87d0c023f54df = L.popup({
+        var popup_500210cfa68a984d731b24a99dcdca0b = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_dbd791aedf006afa65450aea7fb04d06 = $(`<div id="html_dbd791aedf006afa65450aea7fb04d06" style="width: 100.0%; height: 100.0%;"><b>City of Forney Animal Shelter</b><br>APA Partner Shelter<br>13 intakes YTD 2026</div>`)[0];
-                popup_a63ccb01e0ab6d14bbd87d0c023f54df.setContent(html_dbd791aedf006afa65450aea7fb04d06);
+                var html_d030632bdfb5580466d54b64c54fd515 = $(`<div id="html_d030632bdfb5580466d54b64c54fd515" style="width: 100.0%; height: 100.0%;"><b>City of Forney Animal Shelter</b><br>APA Partner Shelter<br>13 intakes YTD 2026</div>`)[0];
+                popup_500210cfa68a984d731b24a99dcdca0b.setContent(html_d030632bdfb5580466d54b64c54fd515);
             
         
 
-        marker_26d6c08029442c1683387fd117c30076.bindPopup(popup_a63ccb01e0ab6d14bbd87d0c023f54df)
+        marker_97c971ec9f67964b4e6b3989a3295518.bindPopup(popup_500210cfa68a984d731b24a99dcdca0b)
         ;
 
         
     
     
-            marker_26d6c08029442c1683387fd117c30076.bindTooltip(
+            marker_97c971ec9f67964b4e6b3989a3295518.bindTooltip(
                 `<div>
                      <div><b>City of Forney Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -2036,17 +2044,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_26d6c08029442c1683387fd117c30076.setIcon(div_icon_7ff7e4a7ecdb989abe2e34ef68826ab3);
+                marker_97c971ec9f67964b4e6b3989a3295518.setIcon(div_icon_87b4b7daeced6e4ce63a09e73a994b30);
             
     
-            var marker_a215d12ba84c3520f89f0e5845f7fbcd = L.marker(
+            var marker_f4d764f5f540eee2a73a4629c056c182 = L.marker(
                 [32.5635, -97.142],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_56f812891768454d9c42330882b54708 = L.divIcon({
+            var div_icon_083f8193abb0fb432af0ebbdf9a704e8 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.312px;height:10.312px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.844000000000001px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -2054,24 +2062,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_362c2609b4d9c9598799f8fd1533fc0c = L.popup({
+        var popup_18e3f690ed41aa2c0bed864843f9df0e = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_308731b82d26663140d3eb59065b3703 = $(`<div id="html_308731b82d26663140d3eb59065b3703" style="width: 100.0%; height: 100.0%;"><b>Averting CAT-astrophe</b><br>APA Partner Shelter<br>13 intakes YTD 2026</div>`)[0];
-                popup_362c2609b4d9c9598799f8fd1533fc0c.setContent(html_308731b82d26663140d3eb59065b3703);
+                var html_abe5c166b400e2498028936b5a455d6e = $(`<div id="html_abe5c166b400e2498028936b5a455d6e" style="width: 100.0%; height: 100.0%;"><b>Averting CAT-astrophe</b><br>APA Partner Shelter<br>13 intakes YTD 2026</div>`)[0];
+                popup_18e3f690ed41aa2c0bed864843f9df0e.setContent(html_abe5c166b400e2498028936b5a455d6e);
             
         
 
-        marker_a215d12ba84c3520f89f0e5845f7fbcd.bindPopup(popup_362c2609b4d9c9598799f8fd1533fc0c)
+        marker_f4d764f5f540eee2a73a4629c056c182.bindPopup(popup_18e3f690ed41aa2c0bed864843f9df0e)
         ;
 
         
     
     
-            marker_a215d12ba84c3520f89f0e5845f7fbcd.bindTooltip(
+            marker_f4d764f5f540eee2a73a4629c056c182.bindTooltip(
                 `<div>
                      <div><b>Averting CAT-astrophe</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -2081,17 +2089,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_a215d12ba84c3520f89f0e5845f7fbcd.setIcon(div_icon_56f812891768454d9c42330882b54708);
+                marker_f4d764f5f540eee2a73a4629c056c182.setIcon(div_icon_083f8193abb0fb432af0ebbdf9a704e8);
             
     
-            var marker_8699b9122b2976f252ba2bfb54a0d19e = L.marker(
+            var marker_69be044c233d1519b314836c03d2dc8d = L.marker(
                 [31.5832, -94.6792],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_82d73a1965dc579b82abeb97931dfb68 = L.divIcon({
+            var div_icon_fcf5ff5bed9e855bd4c28aadb94e1731 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.312px;height:10.312px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.844000000000001px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -2099,24 +2107,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_8704e9c768c50a6cff789bba444f032a = L.popup({
+        var popup_5fa39b0308cf635596cc9735464ecfcf = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_f3c0b5161e2e84552d4682cb836185d2 = $(`<div id="html_f3c0b5161e2e84552d4682cb836185d2" style="width: 100.0%; height: 100.0%;"><b>Nacogdoches Animal Shelter</b><br>APA Partner Shelter<br>13 intakes YTD 2026</div>`)[0];
-                popup_8704e9c768c50a6cff789bba444f032a.setContent(html_f3c0b5161e2e84552d4682cb836185d2);
+                var html_105b38ea22ff4476310f0035bd58ddcc = $(`<div id="html_105b38ea22ff4476310f0035bd58ddcc" style="width: 100.0%; height: 100.0%;"><b>Nacogdoches Animal Shelter</b><br>APA Partner Shelter<br>13 intakes YTD 2026</div>`)[0];
+                popup_5fa39b0308cf635596cc9735464ecfcf.setContent(html_105b38ea22ff4476310f0035bd58ddcc);
             
         
 
-        marker_8699b9122b2976f252ba2bfb54a0d19e.bindPopup(popup_8704e9c768c50a6cff789bba444f032a)
+        marker_69be044c233d1519b314836c03d2dc8d.bindPopup(popup_5fa39b0308cf635596cc9735464ecfcf)
         ;
 
         
     
     
-            marker_8699b9122b2976f252ba2bfb54a0d19e.bindTooltip(
+            marker_69be044c233d1519b314836c03d2dc8d.bindTooltip(
                 `<div>
                      <div><b>Nacogdoches Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -2126,17 +2134,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_8699b9122b2976f252ba2bfb54a0d19e.setIcon(div_icon_82d73a1965dc579b82abeb97931dfb68);
+                marker_69be044c233d1519b314836c03d2dc8d.setIcon(div_icon_fcf5ff5bed9e855bd4c28aadb94e1731);
             
     
-            var marker_6c4680e85f799bc8a8aee31778016de9 = L.marker(
+            var marker_45587f79933dda92a711ec33c5e3cd4e = L.marker(
                 [32.4013, -97.2162],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_adf4a99a3b854ef2d6ba4031ff32f153 = L.divIcon({
+            var div_icon_76599c05bdf98bede098f259e866a0ec = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.288px;height:10.288px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.856px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -2144,24 +2152,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_6f7114eee9c7f63850186403877232c9 = L.popup({
+        var popup_8fd8b525b8405bf489c30dec01f5eda9 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_3c70c476ac80aa2d2eb8ee3f2d52dba2 = $(`<div id="html_3c70c476ac80aa2d2eb8ee3f2d52dba2" style="width: 100.0%; height: 100.0%;"><b>Alvarado Animal Shelter</b><br>APA Partner Shelter<br>12 intakes YTD 2026</div>`)[0];
-                popup_6f7114eee9c7f63850186403877232c9.setContent(html_3c70c476ac80aa2d2eb8ee3f2d52dba2);
+                var html_00b59c3dd02e84abebe565164328fc0e = $(`<div id="html_00b59c3dd02e84abebe565164328fc0e" style="width: 100.0%; height: 100.0%;"><b>Alvarado Animal Shelter</b><br>APA Partner Shelter<br>12 intakes YTD 2026</div>`)[0];
+                popup_8fd8b525b8405bf489c30dec01f5eda9.setContent(html_00b59c3dd02e84abebe565164328fc0e);
             
         
 
-        marker_6c4680e85f799bc8a8aee31778016de9.bindPopup(popup_6f7114eee9c7f63850186403877232c9)
+        marker_45587f79933dda92a711ec33c5e3cd4e.bindPopup(popup_8fd8b525b8405bf489c30dec01f5eda9)
         ;
 
         
     
     
-            marker_6c4680e85f799bc8a8aee31778016de9.bindTooltip(
+            marker_45587f79933dda92a711ec33c5e3cd4e.bindTooltip(
                 `<div>
                      <div><b>Alvarado Animal Shelter</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -2171,17 +2179,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_6c4680e85f799bc8a8aee31778016de9.setIcon(div_icon_adf4a99a3b854ef2d6ba4031ff32f153);
+                marker_45587f79933dda92a711ec33c5e3cd4e.setIcon(div_icon_76599c05bdf98bede098f259e866a0ec);
             
     
-            var marker_78fa30985c6608a48edf6771d4802976 = L.marker(
+            var marker_f05f4626bfbe6d2bfa8ee5f6f9d73f51 = L.marker(
                 [29.2486, -99.7874],
                 {
 }
-            ).addTo(feature_group_c865d5bcf71d96ea446e282d3c80680e);
+            ).addTo(feature_group_4fff5e6633c70bdcdcaf54cc1631e906);
         
     
-            var div_icon_0f0a60a0ca98afc3d2daf1333d4bfba2 = L.divIcon({
+            var div_icon_a31873c706bb7ad1cc579276196751b0 = L.divIcon({
   "html": "\u003cdiv style=\"width:36px;height:36px;overflow:visible;\"\u003e\u003cdiv style=\"width:10.096px;height:10.096px;background:#ffffff;transform:rotate(45deg);border:2px solid #1a1a1a;margin:12.952px;opacity:0.92;box-shadow:1px 1px 2px rgba(0,0,0,.3);\"\u003e\u003c/div\u003e\u003c/div\u003e",
   "iconSize": [36, 36],
   "iconAnchor": [18, 18],
@@ -2189,24 +2197,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_a714d8a94b1dc0589145cc7472118035 = L.popup({
+        var popup_333575abc9ff6ae7eec3fa774afcc1cf = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_0dcff9118fbfe53310a1397f3a41788b = $(`<div id="html_0dcff9118fbfe53310a1397f3a41788b" style="width: 100.0%; height: 100.0%;"><b>Humane Society of Uvalde</b><br>APA Partner Shelter<br>4 intakes YTD 2026<br><i>Below the 10-intake cutoff — shown due to current flooding</i></div>`)[0];
-                popup_a714d8a94b1dc0589145cc7472118035.setContent(html_0dcff9118fbfe53310a1397f3a41788b);
+                var html_5e3bd5770f6fb515df6f370cc8e8e30c = $(`<div id="html_5e3bd5770f6fb515df6f370cc8e8e30c" style="width: 100.0%; height: 100.0%;"><b>Humane Society of Uvalde</b><br>APA Partner Shelter<br>4 intakes YTD 2026<br><i>Below the 10-intake cutoff — shown due to current flooding</i></div>`)[0];
+                popup_333575abc9ff6ae7eec3fa774afcc1cf.setContent(html_5e3bd5770f6fb515df6f370cc8e8e30c);
             
         
 
-        marker_78fa30985c6608a48edf6771d4802976.bindPopup(popup_a714d8a94b1dc0589145cc7472118035)
+        marker_f05f4626bfbe6d2bfa8ee5f6f9d73f51.bindPopup(popup_333575abc9ff6ae7eec3fa774afcc1cf)
         ;
 
         
     
     
-            marker_78fa30985c6608a48edf6771d4802976.bindTooltip(
+            marker_f05f4626bfbe6d2bfa8ee5f6f9d73f51.bindTooltip(
                 `<div>
                      <div><b>Humane Society of Uvalde</b><br>APA Partner Shelter</div>
                  </div>`,
@@ -2216,26 +2224,26 @@ window._currentView = 'radar';
             );
         
     
-                marker_78fa30985c6608a48edf6771d4802976.setIcon(div_icon_0f0a60a0ca98afc3d2daf1333d4bfba2);
+                marker_f05f4626bfbe6d2bfa8ee5f6f9d73f51.setIcon(div_icon_a31873c706bb7ad1cc579276196751b0);
             
     
-            feature_group_c865d5bcf71d96ea446e282d3c80680e.addTo(map_cca788ce4087693483f97d5cdd4ca320);
+            feature_group_4fff5e6633c70bdcdcaf54cc1631e906.addTo(map_e2fe5cfde345185169d312c50185920b);
         
     
-            var feature_group_e069c6671fc4ae74efa0f1691c445cdd = L.featureGroup(
+            var feature_group_08a570e7cdf5c59bd049c37d26302af7 = L.featureGroup(
                 {
 }
             );
         
     
-            var marker_961ca4184b31bbd5c804e783964bb735 = L.marker(
+            var marker_11e39c94e477fe9bb6cbab4d0c7453cc = L.marker(
                 [30.2627, -97.7539],
                 {
 }
-            ).addTo(feature_group_e069c6671fc4ae74efa0f1691c445cdd);
+            ).addTo(feature_group_08a570e7cdf5c59bd049c37d26302af7);
         
     
-            var div_icon_cb6463d76a7ce0cac65d4e9d0077dfce = L.divIcon({
+            var div_icon_1806ec5edae0729d0a360062b11813ac = L.divIcon({
   "html": "\u003cdiv style=\"font-size:22px;line-height:1;color:#dd5928;text-shadow:0 0 3px rgba(0,0,0,.4);margin-top:-11px;margin-left:-11px;\"\u003e\u0026#9733;\u003c/div\u003e",
   "iconSize": [22, 22],
   "iconAnchor": [11, 11],
@@ -2243,24 +2251,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_42b0b6de05b9d2ad812165116ad0dd06 = L.popup({
+        var popup_97c29f2e2e6d7ab8001fdba76edcdef3 = L.popup({
   "maxWidth": 250,
 });
 
         
             
-                var html_ab20e5fb3409db9cc5a928857fa29546 = $(`<div id="html_ab20e5fb3409db9cc5a928857fa29546" style="width: 100.0%; height: 100.0%;"><b>Town Lake Animal Center</b><br>1,656 intakes YTD 2026 (Austin Animal Center)</div>`)[0];
-                popup_42b0b6de05b9d2ad812165116ad0dd06.setContent(html_ab20e5fb3409db9cc5a928857fa29546);
+                var html_e90e80307d6736cf70cfef1b12748641 = $(`<div id="html_e90e80307d6736cf70cfef1b12748641" style="width: 100.0%; height: 100.0%;"><b>Town Lake Animal Center</b><br>1,656 intakes YTD 2026 (Austin Animal Center)</div>`)[0];
+                popup_97c29f2e2e6d7ab8001fdba76edcdef3.setContent(html_e90e80307d6736cf70cfef1b12748641);
             
         
 
-        marker_961ca4184b31bbd5c804e783964bb735.bindPopup(popup_42b0b6de05b9d2ad812165116ad0dd06)
+        marker_11e39c94e477fe9bb6cbab4d0c7453cc.bindPopup(popup_97c29f2e2e6d7ab8001fdba76edcdef3)
         ;
 
         
     
     
-            marker_961ca4184b31bbd5c804e783964bb735.bindTooltip(
+            marker_11e39c94e477fe9bb6cbab4d0c7453cc.bindTooltip(
                 `<div>
                      Town Lake Animal Center
                  </div>`,
@@ -2270,17 +2278,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_961ca4184b31bbd5c804e783964bb735.setIcon(div_icon_cb6463d76a7ce0cac65d4e9d0077dfce);
+                marker_11e39c94e477fe9bb6cbab4d0c7453cc.setIcon(div_icon_1806ec5edae0729d0a360062b11813ac);
             
     
-            var marker_085cedb5f6454497ed6507a413ff7ebb = L.marker(
+            var marker_4899586075bbe81a922e6dec4d7e7107 = L.marker(
                 [30.296549, -97.767749],
                 {
 }
-            ).addTo(feature_group_e069c6671fc4ae74efa0f1691c445cdd);
+            ).addTo(feature_group_08a570e7cdf5c59bd049c37d26302af7);
         
     
-            var div_icon_07eb46587c2129fe48f832aee1f73ffc = L.divIcon({
+            var div_icon_0e2d94be370613b40d14a552a30145a0 = L.divIcon({
   "html": "\u003cdiv style=\"font-size:22px;line-height:1;color:#dd5928;text-shadow:0 0 3px rgba(0,0,0,.4);margin-top:-11px;margin-left:-11px;\"\u003e\u0026#9733;\u003c/div\u003e",
   "iconSize": [22, 22],
   "iconAnchor": [11, 11],
@@ -2288,24 +2296,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_4f7a7c9d603238f3f107a20d40b8b581 = L.popup({
+        var popup_d5e6be5db5cc10d19ed828e81bf51bd4 = L.popup({
   "maxWidth": 250,
 });
 
         
             
-                var html_069afebdb119d2b3eaede586211a85a2 = $(`<div id="html_069afebdb119d2b3eaede586211a85a2" style="width: 100.0%; height: 100.0%;"><b>Tarrytown Adoption Center</b></div>`)[0];
-                popup_4f7a7c9d603238f3f107a20d40b8b581.setContent(html_069afebdb119d2b3eaede586211a85a2);
+                var html_0254ce799538c68ded9c2699ed56625c = $(`<div id="html_0254ce799538c68ded9c2699ed56625c" style="width: 100.0%; height: 100.0%;"><b>Tarrytown Adoption Center</b></div>`)[0];
+                popup_d5e6be5db5cc10d19ed828e81bf51bd4.setContent(html_0254ce799538c68ded9c2699ed56625c);
             
         
 
-        marker_085cedb5f6454497ed6507a413ff7ebb.bindPopup(popup_4f7a7c9d603238f3f107a20d40b8b581)
+        marker_4899586075bbe81a922e6dec4d7e7107.bindPopup(popup_d5e6be5db5cc10d19ed828e81bf51bd4)
         ;
 
         
     
     
-            marker_085cedb5f6454497ed6507a413ff7ebb.bindTooltip(
+            marker_4899586075bbe81a922e6dec4d7e7107.bindTooltip(
                 `<div>
                      Tarrytown Adoption Center
                  </div>`,
@@ -2315,17 +2323,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_085cedb5f6454497ed6507a413ff7ebb.setIcon(div_icon_07eb46587c2129fe48f832aee1f73ffc);
+                marker_4899586075bbe81a922e6dec4d7e7107.setIcon(div_icon_0e2d94be370613b40d14a552a30145a0);
             
     
-            var marker_ecc45f287a3e7a66f37e13e220e1f745 = L.marker(
+            var marker_d1b2b9f58164885cd344a337b5303d61 = L.marker(
                 [30.3496, -97.3702],
                 {
 }
-            ).addTo(feature_group_e069c6671fc4ae74efa0f1691c445cdd);
+            ).addTo(feature_group_08a570e7cdf5c59bd049c37d26302af7);
         
     
-            var div_icon_5bb7b88e790a32b87e3578d12e26241b = L.divIcon({
+            var div_icon_12d4e962d99519c6325023f36abf7317 = L.divIcon({
   "html": "\u003cdiv style=\"font-size:22px;line-height:1;color:#dd5928;text-shadow:0 0 3px rgba(0,0,0,.4);margin-top:-11px;margin-left:-11px;\"\u003e\u0026#9733;\u003c/div\u003e",
   "iconSize": [22, 22],
   "iconAnchor": [11, 11],
@@ -2333,24 +2341,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_9346b0391d19c5a52ee9d7adadf14805 = L.popup({
+        var popup_a997e956692fab3fe71a1d2e10c536fc = L.popup({
   "maxWidth": 250,
 });
 
         
             
-                var html_91b1f3057c50c4c7d0ee0ae5cf248f9e = $(`<div id="html_91b1f3057c50c4c7d0ee0ae5cf248f9e" style="width: 100.0%; height: 100.0%;"><b>Elgin Transport Hub</b></div>`)[0];
-                popup_9346b0391d19c5a52ee9d7adadf14805.setContent(html_91b1f3057c50c4c7d0ee0ae5cf248f9e);
+                var html_dac082353bad250bce80845387fa96c0 = $(`<div id="html_dac082353bad250bce80845387fa96c0" style="width: 100.0%; height: 100.0%;"><b>Elgin Transport Hub</b></div>`)[0];
+                popup_a997e956692fab3fe71a1d2e10c536fc.setContent(html_dac082353bad250bce80845387fa96c0);
             
         
 
-        marker_ecc45f287a3e7a66f37e13e220e1f745.bindPopup(popup_9346b0391d19c5a52ee9d7adadf14805)
+        marker_d1b2b9f58164885cd344a337b5303d61.bindPopup(popup_a997e956692fab3fe71a1d2e10c536fc)
         ;
 
         
     
     
-            marker_ecc45f287a3e7a66f37e13e220e1f745.bindTooltip(
+            marker_d1b2b9f58164885cd344a337b5303d61.bindTooltip(
                 `<div>
                      Elgin Transport Hub
                  </div>`,
@@ -2360,17 +2368,17 @@ window._currentView = 'radar';
             );
         
     
-                marker_ecc45f287a3e7a66f37e13e220e1f745.setIcon(div_icon_5bb7b88e790a32b87e3578d12e26241b);
+                marker_d1b2b9f58164885cd344a337b5303d61.setIcon(div_icon_12d4e962d99519c6325023f36abf7317);
             
     
-            var marker_020080a739409f8d771390f983fb56b9 = L.marker(
+            var marker_d6b5491b8e6ffa7891ca467dd0714aa9 = L.marker(
                 [30.2347022, -97.8676067],
                 {
 }
-            ).addTo(feature_group_e069c6671fc4ae74efa0f1691c445cdd);
+            ).addTo(feature_group_08a570e7cdf5c59bd049c37d26302af7);
         
     
-            var div_icon_1ac7f2ca67f44f96c45478f299577aed = L.divIcon({
+            var div_icon_66874b65f34dd6b4edbacd218387ba79 = L.divIcon({
   "html": "\u003cdiv style=\"font-size:22px;line-height:1;color:#dd5928;text-shadow:0 0 3px rgba(0,0,0,.4);margin-top:-11px;margin-left:-11px;\"\u003e\u0026#9733;\u003c/div\u003e",
   "iconSize": [22, 22],
   "iconAnchor": [11, 11],
@@ -2378,24 +2386,24 @@ window._currentView = 'radar';
 });
         
     
-        var popup_aa45779188ef943a304354dbd958a9de = L.popup({
+        var popup_3431e816e6ec16a0a70c0596a8d8f4ca = L.popup({
   "maxWidth": 250,
 });
 
         
             
-                var html_d43cacef73a66fb2a177680657c69cf1 = $(`<div id="html_d43cacef73a66fb2a177680657c69cf1" style="width: 100.0%; height: 100.0%;"><b>APA! Regional Shelter Pet Hospital</b></div>`)[0];
-                popup_aa45779188ef943a304354dbd958a9de.setContent(html_d43cacef73a66fb2a177680657c69cf1);
+                var html_a1d54146664730a0bcdef80b684d8fc6 = $(`<div id="html_a1d54146664730a0bcdef80b684d8fc6" style="width: 100.0%; height: 100.0%;"><b>APA! Regional Shelter Pet Hospital</b></div>`)[0];
+                popup_3431e816e6ec16a0a70c0596a8d8f4ca.setContent(html_a1d54146664730a0bcdef80b684d8fc6);
             
         
 
-        marker_020080a739409f8d771390f983fb56b9.bindPopup(popup_aa45779188ef943a304354dbd958a9de)
+        marker_d6b5491b8e6ffa7891ca467dd0714aa9.bindPopup(popup_3431e816e6ec16a0a70c0596a8d8f4ca)
         ;
 
         
     
     
-            marker_020080a739409f8d771390f983fb56b9.bindTooltip(
+            marker_d6b5491b8e6ffa7891ca467dd0714aa9.bindTooltip(
                 `<div>
                      APA! Regional Shelter Pet Hospital
                  </div>`,
@@ -2405,10 +2413,10 @@ window._currentView = 'radar';
             );
         
     
-                marker_020080a739409f8d771390f983fb56b9.setIcon(div_icon_1ac7f2ca67f44f96c45478f299577aed);
+                marker_d6b5491b8e6ffa7891ca467dd0714aa9.setIcon(div_icon_66874b65f34dd6b4edbacd218387ba79);
             
     
-            feature_group_e069c6671fc4ae74efa0f1691c445cdd.addTo(map_cca788ce4087693483f97d5cdd4ca320);
+            feature_group_08a570e7cdf5c59bd049c37d26302af7.addTo(map_e2fe5cfde345185169d312c50185920b);
         
 </script>
 </html>
